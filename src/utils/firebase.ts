@@ -1,4 +1,6 @@
-import firebase from 'firebase';
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/firestore';
 
 export type FirebaseConfig = {
     apiKey: string;
@@ -11,7 +13,7 @@ export type FirebaseConfig = {
     measurementId: string;
 };
 
-const firebaseConfig: FirebaseConfig = {
+const firebaseConfig = {
     apiKey: '***REMOVED***',
     authDomain: '***REMOVED***',
     databaseURL: '***REMOVED***',
@@ -23,4 +25,5 @@ const firebaseConfig: FirebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
-export default firebase;
+export const auth = firebase.auth();
+export const firestore = firebase.firestore();

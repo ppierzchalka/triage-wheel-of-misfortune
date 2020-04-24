@@ -1,14 +1,21 @@
-import 'react-app-polyfill/ie11';
 // tslint:disable-next-line:ordered-imports
 import React from 'react';
+import 'react-app-polyfill/ie11';
 import ReactDOM from 'react-dom';
-import App from './App';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+import { App } from './App';
+import { rootReducer } from './reducers';
 import * as serviceWorker from './serviceWorker';
 import './styles/css/index.css';
 
+const store = createStore(rootReducer);
+
 ReactDOM.render(
     <React.StrictMode>
-        <App />
+        <Provider store={store}>
+            <App />
+        </Provider>
     </React.StrictMode>,
     document.getElementById('root')
 );
