@@ -14,7 +14,7 @@
         "arrow-return-shorthand": true,
         "import-spacing": true,
         "no-debugger": true,
-        "no-console": true,
+        "no-console": false,
         "no-eval": true,
         "no-duplicate-super": true,
         "no-empty": false,
