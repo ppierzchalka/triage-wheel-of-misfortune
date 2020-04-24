@@ -1,41 +1,28 @@
-export type AuthUser = {
-    id: string | null;
-};
+export type AuthUser = firebase.User | null;
 
 export enum AuthUserActionType {
-    SignUp = 'SignUp',
-    SignIn = 'SignIn',
-    SignOut = 'SignOut',
+    SetAuthedUser = 'SetAuthedUser',
+    UnsetAuthedUser = 'UnsetAuthedUser',
 }
 
-export type SignUpAction = {
-    type: AuthUserActionType.SignUp;
+export type SetAuthedUserAction = {
+    type: AuthUserActionType.SetAuthedUser;
     payload: AuthUser;
 };
 
-export type SignInAction = {
-    type: AuthUserActionType.SignIn;
+export type UnsetAuthedUserAction = {
+    type: AuthUserActionType.UnsetAuthedUser;
     payload: AuthUser;
 };
 
-export type SignOutAction = {
-    type: AuthUserActionType.SignOut;
-    payload: AuthUser;
-};
+export type AuthUserActions = SetAuthedUserAction | UnsetAuthedUserAction;
 
-export type AuthUserActions = SignUpAction | SignInAction | SignOutAction;
-
-export const signIn = (user: AuthUser): SignUpAction => ({
-    type: AuthUserActionType.SignUp,
+export const signIn = (user: AuthUser): SetAuthedUserAction => ({
+    type: AuthUserActionType.SetAuthedUser,
     payload: user,
 });
 
-export const addMember = (user: AuthUser): SignInAction => ({
-    type: AuthUserActionType.SignIn,
+export const addMember = (user: null): UnsetAuthedUserAction => ({
+    type: AuthUserActionType.UnsetAuthedUser,
     payload: user,
-});
-
-export const removeMember = (user: null): SignOutAction => ({
-    type: AuthUserActionType.SignOut,
-    payload: {id: user},
 });

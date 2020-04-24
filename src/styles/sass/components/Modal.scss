@@ -1,0 +1,20 @@
+.anonymous-dialog__wrapper {
+    .anonymous-dialog_form {
+    width: 400px;
+        margin-bottom: 36px;
+    }
+    .anonymous-dialog__bottom-text {
+        .anonymous-dialog__bottom-button {
+            display: inline;
+            color: rgba(0, 0, 0, 0.54);
+            font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+            letter-spacing: 0.00938em;
+            background: none;
+            border: none;
+            margin: 0;
+            padding: 0;
+            text-decoration: underline;
+            font-size: 1rem;
+        }
+    }
+}

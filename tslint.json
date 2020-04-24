@@ -17,6 +17,8 @@
         "no-console": false,
         "no-eval": true,
         "no-duplicate-super": true,
+        "jsx-no-lambda": false,
+        "jsx-boolean-value": false,
         "no-empty": false,
         "no-empty-interface": true,
         "no-switch-case-fall-through": true,

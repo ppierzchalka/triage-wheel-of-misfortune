@@ -1,0 +1,6 @@
+.app-bar .app-bar__toolbar {
+  display: flex;
+  justify-content: space-between; }
+  .app-bar .app-bar__toolbar .app-bar__user-menu .app-bar__user-account-button {
+    margin: 0px 5px;
+    padding: 5px 10px; }
