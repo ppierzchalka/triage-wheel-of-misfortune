@@ -63,7 +63,11 @@ export const AnonymousDialog: React.FC<AnonymousDialogProps> = ({ isOpen, onClos
         }
     }
     return (
-        <Dialog open={isOpen} onClose={onClose} aria-labelledby="form-dialog-title" classes={{paper: 'anonymous-dialog__wrapper'}}>
+        <Dialog
+            open={isOpen}
+            onClose={onClose}
+            classes={{ paper: 'anonymous-dialog__wrapper' }}
+        >
             {renderContent()}
         </Dialog>
     )

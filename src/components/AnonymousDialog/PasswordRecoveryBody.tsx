@@ -10,15 +10,26 @@ export type PasswordRecoveryBodyProps = {
 export const PasswordRecoveryBody: React.FC<PasswordRecoveryBodyProps> = ({ onSetModalView, onClose }) => {
     return (
         <React.Fragment>
-            <DialogTitle id="form-dialog-title">Forgot Password</DialogTitle>
+            <DialogTitle>Forgot Password</DialogTitle>
             <DialogContent>
                 <DialogContentText>
                     If provided email address is correct, we will sent an email with password recovery instructions.
                 </DialogContentText>
                 <div className="anonymous-dialog__bottom-text">
                     <DialogContentText>
-                        <button className="anonymous-dialog__bottom-button" onClick={() => onSetModalView(ModalView.ForgotPassword)}>Sign Up</button>{' / '}
-                        <button className="anonymous-dialog__bottom-button" onClick={() => onSetModalView(ModalView.ForgotPassword)}>Sign In</button>
+                        <button
+                            className="anonymous-dialog__bottom-button"
+                            onClick={() => onSetModalView(ModalView.ForgotPassword)}
+                        >
+                            Sign Up
+                            </button>
+                        {' / '}
+                        <button
+                            className="anonymous-dialog__bottom-button"
+                            onClick={() => onSetModalView(ModalView.ForgotPassword)}
+                        >
+                            Sign In
+                            </button>
                     </DialogContentText>
                 </div>
             </DialogContent>
