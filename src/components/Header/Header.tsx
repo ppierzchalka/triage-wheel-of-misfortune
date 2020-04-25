@@ -1,8 +1,9 @@
-import { AppBar, Button, IconButton, Toolbar } from '@material-ui/core';
+import { AppBar, Button, IconButton, Toolbar, Typography } from '@material-ui/core';
 import { Menu } from '@material-ui/icons';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { RootStateType } from '../../reducers';
+import { noop } from '../../utils/helpers';
 
 export type HeaderProps = {
     onToggleDrawer: VoidFunction;
@@ -18,19 +19,22 @@ export const Header: React.FC<HeaderProps> = ({ onToggleDrawer, onShowLoginModal
                 <IconButton edge="start" color="inherit" aria-label="Teams Menu" onClick={onToggleDrawer}>
                     <Menu />
                 </IconButton>
+                <Typography variant="h1" className={'app_bar__title'}>
+                    Triage wheel of misfortune
+                </Typography>
                 <div className="app-bar__user-menu">
                     {authUser
                         ? <Button
                             color="inherit"
                             classes={{ root: 'app-bar__user-account-button' }}
-                            onClick={onLogOut}
+                            onClick={authUser ? onLogOut : noop}
                         >
                             Log Out
                         </Button>
                         : <Button
                             color="inherit"
                             classes={{ root: 'app-bar__user-account-button' }}
-                            onClick={onShowLoginModal}
+                            onClick={!authUser ? onShowLoginModal : noop}
                         >
                             Log In
                             </Button>

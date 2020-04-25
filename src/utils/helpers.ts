@@ -3,3 +3,7 @@ export const generateUniqueId = (): string => {
 };
 
 export const emailRegexp = new RegExp(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/);
+
+export const noop = (..._params: any) => {
+    //
+}

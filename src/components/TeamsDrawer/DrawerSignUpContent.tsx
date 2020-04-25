@@ -8,10 +8,10 @@ export type DrawerSignUpContentProps = {
 export const DrawerSignUpContent: React.FC<DrawerSignUpContentProps> = ({ onShowLoginModal }) => {
     return (
         <Container classes={{ root: 'drawer__anonymous-content' }}>
-            <Typography variant="h4" gutterBottom>
+            <Typography variant="h4" classes={{ root: 'drawer__sign-in-title' }} gutterBottom>
                 You are not signed in.
             </Typography>
-            <Typography variant="subtitle1" gutterBottom>
+            <Typography variant="subtitle1" classes={{ root: 'drawer__sign-in-subtitle' }} gutterBottom>
                 Please sign in to continue
             </Typography>
             <Button

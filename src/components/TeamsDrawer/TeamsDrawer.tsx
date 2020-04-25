@@ -1,4 +1,5 @@
-import { Container, Drawer, DrawerProps } from '@material-ui/core';
+import { Container, Drawer, DrawerProps, IconButton } from '@material-ui/core';
+import { Close } from '@material-ui/icons';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { RootStateType } from '../../reducers';
@@ -19,10 +20,14 @@ export const TeamsDrawer: React.FC<TeamsDrawerProps> = ({
     onShowLoginModal
 }) => {
     const authUser = useSelector((state: RootStateType) => state.authUser);
-
     return (
-        <Drawer anchor={anchor} open={isOpen} onClose={onClose}>
-            <Container classes={{root: 'drawer__wrapper'}}>
+        <Drawer anchor={anchor} open={isOpen} onClose={onClose} classes={{ root: 'drawer' }}>
+            <Container classes={{ root: 'drawer__close-button-wrapper' }}>
+                <IconButton edge="start" color="inherit" aria-label="Close" onClick={onClose} classes={{ root: 'drawer__close-button' }}>
+                    <Close />
+                </IconButton>
+            </Container>
+            <Container classes={{ root: 'drawer__wrapper' }}>
                 {authUser
                     ? <DrawerUserContent />
                     : <DrawerSignUpContent onShowLoginModal={onShowLoginModal}/>

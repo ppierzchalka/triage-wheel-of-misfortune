@@ -1,12 +1,12 @@
 import React, { Dispatch } from 'react';
 import { connect } from 'react-redux';
-import { AuthUser, signIn } from './actions/authUser';
+import { AuthUser, signIn, signOut } from './actions/authUser';
 import { AnonymousDialog } from './components/AnonymousDialog/AnonymousDialog';
 import { BodyWrapper } from './components/BodyWrapper/BodyWrapper';
 import { Header } from './components/Header/Header';
 import { TeamsDrawer } from './components/TeamsDrawer/TeamsDrawer';
 import { RootStateActions, RootStateType } from './reducers';
-import { auth } from './utils/firebase';
+import { auth, generateUserDocument } from './utils/firebase';
 
 export type AppWrapperProps = {
     authUser: AuthUser;
@@ -24,8 +24,11 @@ class AppWrapper extends React.Component<AppWrapperProps, AppWrapperState> {
     }
 
     componentDidMount() {
-        auth.onAuthStateChanged((authUser) => {
-            this.props.dispatch(signIn(authUser))
+        auth.onAuthStateChanged(async (authUser) => {
+            const user = await generateUserDocument(authUser);
+            if (user) {
+                this.props.dispatch(signIn(user))
+            }
         })
     }
 
@@ -42,6 +45,7 @@ class AppWrapper extends React.Component<AppWrapperProps, AppWrapperState> {
     private handleLogOut = () => {
         if (this.props.authUser) {
             auth.signOut();
+            this.props.dispatch(signOut(null))
         }
     }
 

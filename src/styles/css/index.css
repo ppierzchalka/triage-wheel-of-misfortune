@@ -40,22 +40,50 @@ code {
 .app-bar .app-bar__toolbar {
   display: flex;
   justify-content: space-between; }
+  @media screen and (max-width: 400px) {
+    .app-bar .app-bar__toolbar {
+      justify-content: center; } }
+  .app-bar .app-bar__toolbar .app_bar__title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-align: center; }
+    @media screen and (max-width: 400px) {
+      .app-bar .app-bar__toolbar .app_bar__title {
+        font-size: 1rem; } }
   .app-bar .app-bar__toolbar .app-bar__user-menu .app-bar__user-account-button {
-    margin: 0px 5px;
+    margin: 0 0 0 5px;
     padding: 5px 10px; }
+    @media screen and (max-width: 400px) {
+      .app-bar .app-bar__toolbar .app-bar__user-menu .app-bar__user-account-button {
+        padding: 5px 5px; } }
 
-.drawer__wrapper {
+.drawer .drawer__wrapper {
   min-width: 200px;
   max-width: 100vw;
   height: 100%;
   padding: 5% 0 0 0; }
-  .drawer__wrapper .drawer__anonymous-content {
+  @media screen and (max-width: 400px) {
+    .drawer .drawer__wrapper {
+      width: 100vw; } }
+  .drawer .drawer__wrapper .drawer__anonymous-content {
     width: 100%;
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column; }
+    flex-direction: column;
+    text-align: center; }
+    @media screen and (max-width: 400px) {
+      .drawer .drawer__wrapper .drawer__anonymous-content .drawer__sign-in-title {
+        font-size: 1.5rem; }
+      .drawer .drawer__wrapper .drawer__anonymous-content .drawer__sign-in-subtitle {
+        font-size: 1rem; } }
+
+.drawer .drawer__close-button-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0; }
 
 .anonymous-dialog__wrapper .anonymous-dialog_form {
   width: 400px;
@@ -71,4 +99,5 @@ code {
   margin: 0;
   padding: 0;
   text-decoration: underline;
+  cursor: pointer;
   font-size: 1rem; }

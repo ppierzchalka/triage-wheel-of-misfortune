@@ -1,4 +1,8 @@
-export type AuthUser = firebase.User | null;
+export type AuthUser = {
+    uid: string;
+    email?: string | null;
+    displayName?: string | null;
+} | null;
 
 export enum AuthUserActionType {
     SetAuthedUser = 'SetAuthedUser',
@@ -22,7 +26,7 @@ export const signIn = (user: AuthUser): SetAuthedUserAction => ({
     payload: user,
 });
 
-export const addMember = (user: null): UnsetAuthedUserAction => ({
+export const signOut = (user: null): UnsetAuthedUserAction => ({
     type: AuthUserActionType.UnsetAuthedUser,
     payload: user,
 });

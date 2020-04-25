@@ -1,6 +1,6 @@
 import { Button, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from '@material-ui/core';
 import React, { useMemo, useState } from 'react';
-import { emailRegexp } from '../../utils/helpers';
+import { auth, generateUserDocument } from '../../utils/firebase';
 import { ModalView } from './AnonymousDialog';
 
 export type SignUpBodyProps = {
@@ -9,12 +9,18 @@ export type SignUpBodyProps = {
 }
 
 export const SignUpBody: React.FC<SignUpBodyProps> = ({ onSetModalView, onClose }) => {
+    let mounted = true;
     const [name, setName] = useState<string>('');
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [repeatedPassword, setRepeatedPassword] = useState<string>('');
+    const [emailError, setEmailError] = useState<string>('');
+    const [passwordError, setPasswordError] = useState<string>('')
 
     const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        if (!mounted) {
+            return
+        }
         const { id, value } = event.currentTarget;
         if (id === 'name') {
             setName(value);
@@ -30,12 +36,28 @@ export const SignUpBody: React.FC<SignUpBodyProps> = ({ onSetModalView, onClose 
         }
     };
 
-    const verifiedEmail = useMemo(() => {
-        if (email !== '') {
-            return emailRegexp.test(email);
+    const handleSignUp = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        e.preventDefault();
+        try {
+            if (mounted) {
+                const { user } = await auth.createUserWithEmailAndPassword(email, password);
+                generateUserDocument(user, { name })
+            }
+        } catch (error) {
+            if (error.code.includes('password') && mounted) {
+                setPasswordError(error.message)
+            }
+            if (error.code.includes('email') && mounted) {
+                setEmailError(error.message)
+            }
+            console.error('Error while signing up', error)
         }
-        return true;
-    }, [email])
+    }
+
+    const handleClose = () => {
+        mounted = false;
+        onClose()
+    }
 
     const verifiedPassword = useMemo(() => {
         if (password !== '' && repeatedPassword !== '') {
@@ -45,13 +67,23 @@ export const SignUpBody: React.FC<SignUpBodyProps> = ({ onSetModalView, onClose 
     }, [password, repeatedPassword])
 
     const isFormCorrect = useMemo(() => {
-        return name !== ''
-            && password !== ''
+        return password !== ''
             && repeatedPassword !== ''
             && email !== ''
+            && emailError === ''
+            && passwordError === ''
             && verifiedPassword
-            && verifiedEmail
-    }, [name, email, password, repeatedPassword, verifiedEmail, verifiedPassword])
+    }, [email, password, repeatedPassword, emailError, passwordError, verifiedPassword])
+
+    const passwordHelperText = useMemo(() => {
+        if (passwordError !== '') {
+            return passwordError;
+        }
+        if (password !== repeatedPassword && repeatedPassword !== '') {
+            return 'Passwords do not match.'
+        }
+        return undefined;
+    }, [password, repeatedPassword, passwordError])
 
     return (
         <React.Fragment>
@@ -65,7 +97,7 @@ export const SignUpBody: React.FC<SignUpBodyProps> = ({ onSetModalView, onClose 
                         value={name}
                         margin="dense"
                         id="name"
-                        label="Display name"
+                        label="Display name (optional)"
                         type="text"
                         fullWidth
                         onChange={(event) => onChangeHandler(event)}
@@ -77,7 +109,8 @@ export const SignUpBody: React.FC<SignUpBodyProps> = ({ onSetModalView, onClose 
                         label="Email Address"
                         type="email"
                         fullWidth
-                        error={!verifiedEmail}
+                        helperText={emailError !== '' && emailError}
+                        error={emailError !== ''}
                         onChange={(event) => onChangeHandler(event)}
                     />
                     <TextField
@@ -87,7 +120,8 @@ export const SignUpBody: React.FC<SignUpBodyProps> = ({ onSetModalView, onClose 
                         label="Password"
                         type="password"
                         fullWidth
-                        error={!verifiedPassword}
+                        helperText={passwordHelperText}
+                        error={!verifiedPassword || passwordError !== ''}
                         onChange={(event) => onChangeHandler(event)}
                     />
                     <TextField
@@ -97,13 +131,15 @@ export const SignUpBody: React.FC<SignUpBodyProps> = ({ onSetModalView, onClose 
                         label="Repeat Password"
                         type="password"
                         fullWidth
-                        error={!verifiedPassword}
+                        helperText={passwordHelperText}
+                        error={!verifiedPassword || passwordError !== ''}
                         onChange={(event) => onChangeHandler(event)}
                     />
                 </div>
                 <div className="anonymous-dialog__bottom-text">
                     <DialogContentText>
                         Have an account?
+                        {' '}
                         <button
                             className="anonymous-dialog__bottom-button"
                             onClick={() => onSetModalView(ModalView.SignIn)}
@@ -114,10 +150,10 @@ export const SignUpBody: React.FC<SignUpBodyProps> = ({ onSetModalView, onClose 
                 </div>
             </DialogContent>
             <DialogActions>
-                <Button onClick={onClose} color="default">
+                <Button onClick={handleClose} color="default">
                     Cancel
                 </Button>
-                <Button onClick={onClose} color="primary" disabled={!isFormCorrect}>
+                <Button onClick={handleSignUp} color="primary" disabled={!isFormCorrect}>
                     Sign Up
                 </Button>
             </DialogActions>

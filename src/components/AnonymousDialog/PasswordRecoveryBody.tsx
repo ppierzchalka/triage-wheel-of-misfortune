@@ -13,7 +13,7 @@ export const PasswordRecoveryBody: React.FC<PasswordRecoveryBodyProps> = ({ onSe
             <DialogTitle>Forgot Password</DialogTitle>
             <DialogContent>
                 <DialogContentText>
-                    If provided email address is correct, we will sent an email with password recovery instructions.
+                    Password recovery email has been sent to your email address.
                 </DialogContentText>
                 <div className="anonymous-dialog__bottom-text">
                     <DialogContentText>
