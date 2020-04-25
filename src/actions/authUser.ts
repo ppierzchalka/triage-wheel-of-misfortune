@@ -16,7 +16,7 @@ export type SetAuthedUserAction = {
 
 export type UnsetAuthedUserAction = {
     type: AuthUserActionType.UnsetAuthedUser;
-    payload: AuthUser;
+    payload: null;
 };
 
 export type AuthUserActions = SetAuthedUserAction | UnsetAuthedUserAction;
@@ -26,7 +26,7 @@ export const signIn = (user: AuthUser): SetAuthedUserAction => ({
     payload: user,
 });
 
-export const signOut = (user: null): UnsetAuthedUserAction => ({
+export const signOut = (): UnsetAuthedUserAction => ({
     type: AuthUserActionType.UnsetAuthedUser,
-    payload: user,
+    payload: null,
 });

@@ -19,14 +19,14 @@ export const PasswordRecoveryBody: React.FC<PasswordRecoveryBodyProps> = ({ onSe
                     <DialogContentText>
                         <button
                             className="anonymous-dialog__bottom-button"
-                            onClick={() => onSetModalView(ModalView.ForgotPassword)}
+                            onClick={() => onSetModalView(ModalView.SignUp)}
                         >
                             Sign Up
                             </button>
                         {' / '}
                         <button
                             className="anonymous-dialog__bottom-button"
-                            onClick={() => onSetModalView(ModalView.ForgotPassword)}
+                            onClick={() => onSetModalView(ModalView.SignIn)}
                         >
                             Sign In
                             </button>

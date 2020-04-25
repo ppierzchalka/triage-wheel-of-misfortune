@@ -24,4 +24,5 @@ It's time to put an end to silence on triage, if there's no volunteers, we will 
 **[WIP]**
 ### Drawing a lucky winner
 **[WIP]**
-
+#### Favicon
+Favicon taken from [Freepik](https://www.flaticon.com/authors/freepik "Freepik") from [www.flaticon.com](https://www.flaticon.com/ "Flaticon")

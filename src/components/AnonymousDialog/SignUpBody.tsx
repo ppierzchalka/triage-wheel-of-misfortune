@@ -2,6 +2,7 @@ import { Button, DialogActions, DialogContent, DialogContentText, DialogTitle, T
 import React, { useMemo, useState } from 'react';
 import { auth, generateUserDocument } from '../../utils/firebase';
 import { ModalView } from './AnonymousDialog';
+import { LoadingIndicator } from './LoadingIndicator';
 
 export type SignUpBodyProps = {
     onSetModalView: (modalView: ModalView) => void;
@@ -10,6 +11,7 @@ export type SignUpBodyProps = {
 
 export const SignUpBody: React.FC<SignUpBodyProps> = ({ onSetModalView, onClose }) => {
     let mounted = true;
+    const [showLoadingIndicator, setShowLoadingIndicator] = useState<boolean>(false);
     const [name, setName] = useState<string>('');
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
@@ -38,19 +40,23 @@ export const SignUpBody: React.FC<SignUpBodyProps> = ({ onSetModalView, onClose 
 
     const handleSignUp = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault();
-        try {
-            if (mounted) {
-                const { user } = await auth.createUserWithEmailAndPassword(email, password);
-                generateUserDocument(user, { name })
-            }
-        } catch (error) {
-            if (error.code.includes('password') && mounted) {
-                setPasswordError(error.message)
-            }
-            if (error.code.includes('email') && mounted) {
-                setEmailError(error.message)
-            }
-            console.error('Error while signing up', error)
+        setShowLoadingIndicator(true);
+        if (mounted) {
+            auth.createUserWithEmailAndPassword(email, password)
+                .then(({ user }) => {
+                    setShowLoadingIndicator(false);
+                    generateUserDocument(user, { name })
+                })
+                .catch((error) => {
+                    setShowLoadingIndicator(false);
+                    if (error.code.includes('password') && mounted) {
+                        setPasswordError(error.message)
+                    }
+                    if (error.code.includes('email') && mounted) {
+                        setEmailError(error.message)
+                    }
+                    console.error('Error while signing up', error)
+                })
         }
     }
 
@@ -89,6 +95,8 @@ export const SignUpBody: React.FC<SignUpBodyProps> = ({ onSetModalView, onClose 
         <React.Fragment>
             <DialogTitle>Sign Up</DialogTitle>
             <DialogContent>
+                {showLoadingIndicator &&
+                    <LoadingIndicator />}
                 <DialogContentText>
                     Register a new account
             </DialogContentText>

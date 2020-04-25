@@ -2,6 +2,7 @@ import { Button, DialogActions, DialogContent, DialogContentText, DialogTitle, T
 import React, { useState } from 'react';
 import { auth } from '../../utils/firebase';
 import { ModalView } from './AnonymousDialog';
+import { LoadingIndicator } from './LoadingIndicator';
 
 export type ForgotPasswordBodyProps = {
     onSetModalView: (modalView: ModalView) => void;
@@ -10,29 +11,34 @@ export type ForgotPasswordBodyProps = {
 
 export const ForgotPasswordBody: React.FC<ForgotPasswordBodyProps> = ({ onSetModalView, onClose }) => {
     let mounted = true;
+    const [showLoadingIndicator, setShowLoadingIndicator] = useState<boolean>(false);
     const [email, setEmail] = useState<string>('');
     const [emailError, setEmailError] = useState<string>('');
 
     const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { value } = event.currentTarget;
-        if (mounted) {
-            setEmailError('')
-            setEmail(value);
+        if (!mounted) {
+            return
         }
+        setEmailError('')
+        setEmail(value);
     };
 
     const handleRecoverPassword = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         event.preventDefault();
+        setShowLoadingIndicator(true);
         auth.sendPasswordResetEmail(email)
             .then(() => {
+                setShowLoadingIndicator(false);
                 onSetModalView(ModalView.PasswordRecovery)
             })
             .catch((error: any) => {
+                setShowLoadingIndicator(false);
                 if (error && mounted) {
                     setEmailError(error.message)
                 }
-            console.error(error)
-        })
+                console.error(error)
+            })
     }
 
     const handleClose = () => {
@@ -44,6 +50,8 @@ export const ForgotPasswordBody: React.FC<ForgotPasswordBodyProps> = ({ onSetMod
         <React.Fragment>
             <DialogTitle>Password Recovery</DialogTitle>
             <DialogContent>
+                {showLoadingIndicator &&
+                    <LoadingIndicator />}
                 <DialogContentText>
                     Enter an email adress to recover your password
             </DialogContentText>

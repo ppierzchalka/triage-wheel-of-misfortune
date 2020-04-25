@@ -29,6 +29,9 @@ class AppWrapper extends React.Component<AppWrapperProps, AppWrapperState> {
             if (user) {
                 this.props.dispatch(signIn(user))
             }
+            if (!user) {
+                this.props.dispatch(signOut())
+            }
         })
     }
 
@@ -45,7 +48,7 @@ class AppWrapper extends React.Component<AppWrapperProps, AppWrapperState> {
     private handleLogOut = () => {
         if (this.props.authUser) {
             auth.signOut();
-            this.props.dispatch(signOut(null))
+            this.props.dispatch(signOut())
         }
     }
 

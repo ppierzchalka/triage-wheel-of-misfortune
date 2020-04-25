@@ -9,7 +9,7 @@ export enum ModalView {
     SignIn = 'SignIn',
     SignUp = 'SignUp',
     ForgotPassword = 'ForgotPassword',
-    PasswordRecovery = 'PasswordRecovery'
+    PasswordRecovery = 'PasswordRecovery',
 }
 
 export type AnonymousDialogProps = {

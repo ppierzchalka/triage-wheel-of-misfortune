@@ -1,8 +1,8 @@
 import { Button, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from '@material-ui/core';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { auth } from '../../utils/firebase';
-import { emailRegexp } from '../../utils/helpers';
 import { ModalView } from './AnonymousDialog';
+import { LoadingIndicator } from './LoadingIndicator';
 
 export type SignInBodyProps = {
     onSetModalView: (modalView: ModalView) => void;
@@ -10,11 +10,16 @@ export type SignInBodyProps = {
 }
 
 export const SignInBody: React.FC<SignInBodyProps> = ({ onSetModalView, onClose }) => {
+    let mounted = true;
+    const [showLoadingIndicator, setShowLoadingIndicator] = useState<boolean>(false);
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
-    const [error, setError] = useState<string>('');
+    const [signInError, setSignInError] = useState<string>('');
 
     const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        if(!mounted) {
+            return
+        }
         const { id, value } = event.currentTarget;
         if (id === 'email') {
             setEmail(value);
@@ -22,40 +27,44 @@ export const SignInBody: React.FC<SignInBodyProps> = ({ onSetModalView, onClose 
         if (id === 'password') {
             setPassword(value);
         }
-        if (error !== '') {
-            setError('')
+        if (signInError !== '') {
+            setSignInError('')
         }
     };
 
-    const handleSignIn = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        e.preventDefault();
-        auth.signInWithEmailAndPassword(email, password).catch(setError)
+    const handleSignIn = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        event.preventDefault();
+        setShowLoadingIndicator(true);
+        if (mounted) {
+            auth.signInWithEmailAndPassword(email, password)
+            .then(() => {
+                setShowLoadingIndicator(false);
+                onClose()
+            })
+            .catch((error) => {
+                setPassword('');
+                setShowLoadingIndicator(false);
+                setSignInError(error.message)
+            })
+        }
     }
 
-    const verifiedEmail = useMemo(() => {
-        if (email !== '') {
-            return emailRegexp.test(email);
-        }
-        return true;
-    }, [email])
+    const handleClose = () => {
+        mounted = false;
+        onClose()
+    }
 
     const isFormCorrect = useMemo(() => {
         return password !== ''
             && email !== ''
-            && verifiedEmail
-    }, [email, password, verifiedEmail])
-
-    useEffect(() => {
-        if (error !== '') {
-            setEmail('');
-            setPassword('');
-        }
-    }, [error])
+    }, [email, password])
 
     return (
         <React.Fragment>
             <DialogTitle id="form-dialog-title">Sign In</DialogTitle>
             <DialogContent>
+                {showLoadingIndicator &&
+                    <LoadingIndicator />}
                 <DialogContentText>
                     Sign in to continue
             </DialogContentText>
@@ -67,7 +76,8 @@ export const SignInBody: React.FC<SignInBodyProps> = ({ onSetModalView, onClose 
                         label="Email Address"
                         type="email"
                         fullWidth
-                        error={!verifiedEmail || error !== ''}
+                        helperText={signInError !== '' && signInError}
+                        error={signInError !== ''}
                         onChange={(event) => onChangeHandler(event)}
                     />
                     <TextField
@@ -77,7 +87,6 @@ export const SignInBody: React.FC<SignInBodyProps> = ({ onSetModalView, onClose 
                         label="Password"
                         type="password"
                         fullWidth
-                        error={error !== ''}
                         onChange={(event) => onChangeHandler(event)}
                     />
                 </div>
@@ -102,7 +111,7 @@ export const SignInBody: React.FC<SignInBodyProps> = ({ onSetModalView, onClose 
                 </div>
             </DialogContent>
             <DialogActions>
-                <Button onClick={onClose} color="default">
+                <Button onClick={handleClose} color="default">
                     Cancel
                 </Button>
                 <Button onClick={handleSignIn} color="primary" disabled={!isFormCorrect}>
