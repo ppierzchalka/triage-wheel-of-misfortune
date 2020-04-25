@@ -1,7 +1,11 @@
-.anonymous-dialog__wrapper .anonymous-dialog_form {
+.anonymous-dialog__wrapper .anonymous-dialog__form {
   position: relative;
   width: 400px;
   margin-bottom: 36px; }
+  .anonymous-dialog__wrapper .anonymous-dialog__form .anonymous-dialog__submit {
+    width: 100%;
+    padding: 10px;
+    margin-top: 15px; }
 
 .anonymous-dialog__wrapper .anonymous-dialog__bottom-text .anonymous-dialog__bottom-button {
   display: inline;

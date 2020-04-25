@@ -64,6 +64,8 @@ export const AnonymousDialog: React.FC<AnonymousDialogProps> = ({ isOpen, onClos
     }
     return (
         <Dialog
+            disableBackdropClick
+            disableEscapeKeyDown
             open={isOpen}
             onClose={onClose}
             classes={{ paper: 'anonymous-dialog__wrapper' }}

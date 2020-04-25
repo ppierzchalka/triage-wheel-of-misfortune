@@ -24,7 +24,7 @@ export const ForgotPasswordBody: React.FC<ForgotPasswordBodyProps> = ({ onSetMod
         setEmail(value);
     };
 
-    const handleRecoverPassword = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    const handleRecoverPassword = (event: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         setShowLoadingIndicator(true);
         auth.sendPasswordResetEmail(email)
@@ -55,18 +55,29 @@ export const ForgotPasswordBody: React.FC<ForgotPasswordBodyProps> = ({ onSetMod
                 <DialogContentText>
                     Enter an email adress to recover your password
             </DialogContentText>
-                <div className="anonymous-dialog_form">
-                    <TextField
-                        value={email}
-                        margin="dense"
-                        id="email"
-                        label="Email Address"
-                        type="email"
-                        fullWidth
-                        error={emailError !== ''}
-                        helperText={emailError !== '' && emailError}
-                        onChange={(event) => onChangeHandler(event)}
-                    />
+                <div className="anonymous-dialog__form">
+                    <form onSubmit={handleRecoverPassword}>
+                        <TextField
+                            value={email}
+                            margin="dense"
+                            id="email"
+                            label="Email Address"
+                            type="email"
+                            fullWidth
+                            error={emailError !== ''}
+                            helperText={emailError !== '' && emailError}
+                            onChange={(event) => onChangeHandler(event)}
+                        />
+                        <Button
+                            classes={{root: 'anonymous-dialog__submit'}}
+                            type="submit"
+                            color="primary"
+                            disabled={email === '' || emailError !== ''}
+                            variant="contained"
+                        >
+                            Recover Password
+                        </Button>
+                    </form>
                 </div>
                 <div className="anonymous-dialog__bottom-text">
                     <DialogContentText>
@@ -91,9 +102,6 @@ export const ForgotPasswordBody: React.FC<ForgotPasswordBodyProps> = ({ onSetMod
             <DialogActions>
                 <Button onClick={handleClose} color="default">
                     Cancel
-                </Button>
-                <Button onClick={handleRecoverPassword} color="primary" disabled={email === '' || emailError !== ''}>
-                    Recover Password
                 </Button>
             </DialogActions>
         </React.Fragment>

@@ -17,7 +17,8 @@ export const SignInBody: React.FC<SignInBodyProps> = ({ onSetModalView, onClose 
     const [signInError, setSignInError] = useState<string>('');
 
     const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        if(!mounted) {
+        event.preventDefault();
+        if (!mounted) {
             return
         }
         const { id, value } = event.currentTarget;
@@ -32,20 +33,20 @@ export const SignInBody: React.FC<SignInBodyProps> = ({ onSetModalView, onClose 
         }
     };
 
-    const handleSignIn = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    const handleSignIn = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         setShowLoadingIndicator(true);
         if (mounted) {
             auth.signInWithEmailAndPassword(email, password)
-            .then(() => {
-                setShowLoadingIndicator(false);
-                onClose()
-            })
-            .catch((error) => {
-                setPassword('');
-                setShowLoadingIndicator(false);
-                setSignInError(error.message)
-            })
+                .then(() => {
+                    setShowLoadingIndicator(false);
+                    onClose()
+                })
+                .catch((error) => {
+                    setPassword('');
+                    setShowLoadingIndicator(false);
+                    setSignInError(error.message)
+                })
         }
     }
 
@@ -68,7 +69,7 @@ export const SignInBody: React.FC<SignInBodyProps> = ({ onSetModalView, onClose 
                 <DialogContentText>
                     Sign in to continue
             </DialogContentText>
-                <div className="anonymous-dialog_form">
+                <form onSubmit={handleSignIn} className="anonymous-dialog__form">
                     <TextField
                         value={email}
                         margin="dense"
@@ -89,7 +90,16 @@ export const SignInBody: React.FC<SignInBodyProps> = ({ onSetModalView, onClose 
                         fullWidth
                         onChange={(event) => onChangeHandler(event)}
                     />
-                </div>
+                    <Button
+                        classes={{ root: 'anonymous-dialog__submit' }}
+                        type="submit"
+                        color="primary"
+                        disabled={!isFormCorrect}
+                        variant="contained"
+                    >
+                        Sign In
+                    </Button>
+                </form>
                 <div className="anonymous-dialog__bottom-text">
                     <DialogContentText>
                         Don't have an account?
@@ -113,9 +123,6 @@ export const SignInBody: React.FC<SignInBodyProps> = ({ onSetModalView, onClose 
             <DialogActions>
                 <Button onClick={handleClose} color="default">
                     Cancel
-                </Button>
-                <Button onClick={handleSignIn} color="primary" disabled={!isFormCorrect}>
-                    Sign In
                 </Button>
             </DialogActions>
         </React.Fragment>

@@ -38,8 +38,8 @@ export const SignUpBody: React.FC<SignUpBodyProps> = ({ onSetModalView, onClose 
         }
     };
 
-    const handleSignUp = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        e.preventDefault();
+    const handleSignUp = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
         setShowLoadingIndicator(true);
         if (mounted) {
             auth.createUserWithEmailAndPassword(email, password)
@@ -100,7 +100,7 @@ export const SignUpBody: React.FC<SignUpBodyProps> = ({ onSetModalView, onClose 
                 <DialogContentText>
                     Register a new account
             </DialogContentText>
-                <div className="anonymous-dialog_form">
+                <form onSubmit={handleSignUp} className="anonymous-dialog__form">
                     <TextField
                         value={name}
                         margin="dense"
@@ -143,7 +143,16 @@ export const SignUpBody: React.FC<SignUpBodyProps> = ({ onSetModalView, onClose 
                         error={!verifiedPassword || passwordError !== ''}
                         onChange={(event) => onChangeHandler(event)}
                     />
-                </div>
+                    <Button
+                        classes={{ root: 'anonymous-dialog__submit' }}
+                        type="submit"
+                        color="primary"
+                        disabled={!isFormCorrect}
+                        variant="contained"
+                    >
+                        Sign Up
+                    </Button>
+                </form>
                 <div className="anonymous-dialog__bottom-text">
                     <DialogContentText>
                         Have an account?
@@ -160,9 +169,6 @@ export const SignUpBody: React.FC<SignUpBodyProps> = ({ onSetModalView, onClose 
             <DialogActions>
                 <Button onClick={handleClose} color="default">
                     Cancel
-                </Button>
-                <Button onClick={handleSignUp} color="primary" disabled={!isFormCorrect}>
-                    Sign Up
                 </Button>
             </DialogActions>
         </React.Fragment>
