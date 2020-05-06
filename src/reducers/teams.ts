@@ -1,8 +1,9 @@
+import { AuthUserActions, AuthUserActionType } from '../actions/authUser';
 import { TeamActions, TeamActionType, Teams } from '../actions/teams';
 
 const initialTeamsState: Teams = {};
 
-export const teams = (state = initialTeamsState, action: TeamActions): Teams => {
+export const teams = (state = initialTeamsState, action: TeamActions | AuthUserActions): Teams => {
     switch (action.type) {
         case TeamActionType.ReceiveTeams: {
             return {
@@ -43,6 +44,8 @@ export const teams = (state = initialTeamsState, action: TeamActions): Teams => 
                 },
             };
         }
+        case AuthUserActionType.UnsetAuthedUser:
+            return initialTeamsState;
         default:
             return state;
     }

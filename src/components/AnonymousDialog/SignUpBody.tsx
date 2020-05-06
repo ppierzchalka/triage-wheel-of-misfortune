@@ -42,21 +42,20 @@ export const SignUpBody: React.FC<SignUpBodyProps> = ({ onSetModalView, onClose 
         event.preventDefault();
         setShowLoadingIndicator(true);
         if (mounted) {
-            auth.createUserWithEmailAndPassword(email, password)
-                .then(({ user }) => {
-                    setShowLoadingIndicator(false);
-                    generateUserDocument(user, { name })
-                })
-                .catch((error) => {
-                    setShowLoadingIndicator(false);
-                    if (error.code.includes('password') && mounted) {
-                        setPasswordError(error.message)
-                    }
-                    if (error.code.includes('email') && mounted) {
-                        setEmailError(error.message)
-                    }
-                    console.error('Error while signing up', error)
-                })
+            try {
+                const { user } = await auth.createUserWithEmailAndPassword(email, password)
+                setShowLoadingIndicator(false);
+                generateUserDocument(user, { displayName: name })
+            } catch (error) {
+                setShowLoadingIndicator(false);
+                if (error.code.includes('password') && mounted) {
+                    setPasswordError(error.message)
+                }
+                if (error.code.includes('email') && mounted) {
+                    setEmailError(error.message)
+                }
+                console.error('Error while signing up', error)
+            }
         }
     }
 

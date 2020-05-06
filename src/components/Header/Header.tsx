@@ -20,7 +20,7 @@ export const Header: React.FC<HeaderProps> = ({ onToggleDrawer, onShowLoginModal
                     <Menu />
                 </IconButton>
                 <Typography variant="h1" className={'app_bar__title'}>
-                    Triage wheel of misfortune
+                    {authUser ? `Hello, ${authUser.displayName ?? 'User'}. Welcome to Triage wheel of misfortune!` : 'Triage wheel of misfortune'}
                 </Typography>
                 <div className="app-bar__user-menu">
                     {authUser

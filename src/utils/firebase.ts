@@ -36,11 +36,10 @@ export const generateUserDocument = async (user: AuthUser, additionalData?: any)
     const userRef = firestore.doc(`users/${user.uid}`);
     const userData = await userRef.get();
     if (!userData.exists) {
-        const { email, displayName } = user;
+        const { email } = user;
         try {
             await userRef.set({
                 email,
-                displayName,
                 ...additionalData,
             });
         } catch (e) {
