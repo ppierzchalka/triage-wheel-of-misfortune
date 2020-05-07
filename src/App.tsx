@@ -1,16 +1,19 @@
 import React, { Dispatch } from 'react';
 import { connect } from 'react-redux';
-import { AuthUser, signIn, signOut } from './actions/authUser';
+import { AuthUser, signOut } from './actions/authUser';
+import { addMemberToDB } from './actions/members';
+import { handleInitialData } from './actions/shared';
+import { addTeamToDB } from './actions/teams';
 import { AnonymousDialog } from './components/AnonymousDialog/AnonymousDialog';
 import { BodyWrapper } from './components/BodyWrapper/BodyWrapper';
 import { Header } from './components/Header/Header';
 import { TeamsDrawer } from './components/TeamsDrawer/TeamsDrawer';
-import { RootStateActions, RootStateType } from './reducers';
-import { auth, generateUserDocument } from './utils/firebase';
+import { RootStateType } from './reducers';
+import { auth } from './utils/firebase';
 
 export type AppWrapperProps = {
     authUser: AuthUser;
-    dispatch: Dispatch<RootStateActions>
+    dispatch: Dispatch<any>;
 }
 export type AppWrapperState = {
     isDrawerVisible: boolean;
@@ -24,15 +27,7 @@ class AppWrapper extends React.Component<AppWrapperProps, AppWrapperState> {
     }
 
     componentDidMount() {
-        auth.onAuthStateChanged(async (authUser) => {
-            const user = await generateUserDocument(authUser);
-            if (user) {
-                this.props.dispatch(signIn(user))
-            }
-            if (!user) {
-                this.props.dispatch(signOut())
-            }
-        })
+        this.props.dispatch(handleInitialData())
     }
 
     private handleToggleDrawer = (isDrawerVisible: boolean) => {
@@ -52,8 +47,28 @@ class AppWrapper extends React.Component<AppWrapperProps, AppWrapperState> {
         }
     }
 
+    private handleClickMember = () => {
+        if (this.props.authUser) {
+            this.props.dispatch(addMemberToDB(this.props.authUser, 'Przemek', 'P'))
+        }
+    }
+
+    private handleClickTeam = () => {
+        if (this.props.authUser) {
+            this.props.dispatch(addTeamToDB(this.props.authUser, 'Przemek'))
+        }
+    }
+
     private renderApp = () => (
-        <p>App</p>
+        <div>
+            <p>App</p>
+            <button onClick={this.handleClickMember}>
+                add member
+            </button>
+            <button onClick={this.handleClickTeam}>
+                add team
+            </button>
+        </div>
     )
 
     private renderLogIn = () => (

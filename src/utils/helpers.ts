@@ -3,4 +3,13 @@ export const generateUniqueId = (): string => {
 };
 export const noop = (..._params: any) => {
     //
-}
+};
+
+export const transformCollection = (
+    collection: firebase.firestore.QuerySnapshot<firebase.firestore.DocumentData>
+) => {
+    return collection.docs.reduce((agg, curr) => {
+        const currentDocument = curr.data();
+        return Object.assign(agg, currentDocument);
+    }, {});
+};

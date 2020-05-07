@@ -1,8 +1,10 @@
-export type AuthUser = {
+export type AuthedUser = {
     uid: string;
     email?: string | null;
     displayName?: string | null;
-} | null;
+};
+
+export type AuthUser = AuthedUser | null;
 
 export enum AuthUserActionType {
     SetAuthedUser = 'SetAuthedUser',

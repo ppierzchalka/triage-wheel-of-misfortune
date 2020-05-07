@@ -1,3 +1,8 @@
+import { Dispatch } from 'react';
+import { updateEntry } from '../utils/firebase';
+import { generateUniqueId } from '../utils/helpers';
+import { AuthedUser } from './authUser';
+
 export type Team = {
     id: string;
     teamName: string;
@@ -61,6 +66,20 @@ export const addTeam = (team: Team): AddTeamAction => ({
     type: TeamActionType.AddTeam,
     payload: team
 })
+
+export const addTeamToDB = (authedUser: AuthedUser, teamName: string) => (
+    dispatch: Dispatch<any>
+) => {
+    const uid = generateUniqueId();
+    const newTeam: Team = { id: uid, teamName, members: [] };
+    updateEntry(authedUser, newTeam, 'teams')
+        .then((member) => {
+            dispatch(addTeam(member));
+        })
+        .catch((error) => {
+            console.error('Error adding member', error);
+        });
+};
 
 export const removeTeam = (teamId: string): RemoveTeamAction => ({
     type: TeamActionType.RemoveTeam,

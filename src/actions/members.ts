@@ -1,3 +1,8 @@
+import { Dispatch } from 'redux';
+import { updateEntry } from '../utils/firebase';
+import { generateUniqueId } from '../utils/helpers';
+import { AuthedUser } from './authUser';
+
 export type Member = {
     id: string;
     firstName: string;
@@ -27,10 +32,7 @@ export type RemoveMemberAction = {
     payload: string;
 };
 
-export type MemberActions =
-    | ReceiveMembersAction
-    | AddMemberAction
-    | RemoveMemberAction
+export type MemberActions = ReceiveMembersAction | AddMemberAction | RemoveMemberAction;
 
 export const receiveMembers = (members: Members): ReceiveMembersAction => ({
     type: MembersActionType.ReceiveMembers,
@@ -41,6 +43,22 @@ export const addMember = (member: Member): AddMemberAction => ({
     type: MembersActionType.AddMember,
     payload: member,
 });
+
+export const addMemberToDB = (
+    authedUser: AuthedUser, firstName: string, lastName: string
+) => (
+    dispatch: Dispatch<any>
+) => {
+    const uid = generateUniqueId();
+    const newMember: Member = { id: uid, firstName, lastName };
+    updateEntry(authedUser, newMember, 'members')
+        .then((member) => {
+            dispatch(addMember(member));
+        })
+        .catch((error) => {
+            console.error('Error adding member', error);
+        });
+};
 
 export const removeMember = (memberid: string): RemoveMemberAction => ({
     type: MembersActionType.RemoveMember,

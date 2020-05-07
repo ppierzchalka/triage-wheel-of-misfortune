@@ -1,7 +1,10 @@
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
-import { AuthUser } from '../actions/authUser';
+import { AuthedUser, AuthUser } from '../actions/authUser';
+import { Member } from '../actions/members';
+import { Team } from '../actions/teams';
+import { transformCollection } from './helpers';
 
 export type FirebaseConfig = {
     apiKey: string;
@@ -29,7 +32,20 @@ firebase.initializeApp(firebaseConfig);
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();
 
-export const generateUserDocument = async (user: AuthUser, additionalData?: any) => {
+export function updateEntry(user: AuthedUser, entry: Member, key: 'members'): Promise<Member>;
+export function updateEntry(user: AuthedUser, entry: Team, key: 'teams'): Promise<Team>;
+export function updateEntry( user: AuthedUser, entry: Member | Team, key: 'members' | 'teams'): Promise<Member | Team> {
+    const userRef = firestore.collection(`users/${user.uid}/${key}`).doc(entry.id);
+    return userRef
+        .set({ [entry.id]: entry })
+        .then(() => entry)
+        .catch((error) => {
+            console.error(error);
+            return error;
+        });
+};
+
+export const generateUserDocument = async (user: AuthUser, additionalData?: any): Promise<any> => {
     if (user === null) {
         return;
     }
@@ -55,8 +71,12 @@ const getUserDocument = async (uid: string) => {
     }
     try {
         const userDocument = await firestore.doc(`users/${uid}`).get();
+        const userMembers = await firestore.collection((`users/${uid}/members`)).get()
+        const userTeams = await firestore.collection(`users/${uid}/teams`).get()
         return {
             uid,
+            members: transformCollection(userMembers),
+            teams: transformCollection(userTeams),
             ...userDocument.data(),
         };
     } catch (e) {
