@@ -1,7 +1,7 @@
 import { Dispatch } from 'react';
 import { ThunkAction } from 'redux-thunk';
 import { RootStateActions } from '../reducers';
-import { updateEntry } from '../utils/firebase';
+import { addEntry, firebaseRemoveEntry } from '../utils/firebase';
 import { generateUniqueId } from '../utils/helpers';
 import { AuthUser } from './authUser';
 
@@ -73,9 +73,9 @@ export const addTeamToDB = (
     authedUser: AuthUser,
     teamName: string
 ): ThunkAction<Promise<void>, {}, {}, TeamActions> => (dispatch: Dispatch<RootStateActions>) => {
-    const uid = generateUniqueId();
-    const newTeam: Team = { id: uid, teamName, members: [] };
-    return updateEntry(authedUser, newTeam, 'teams')
+    const id = generateUniqueId();
+    const newTeam: Team = { id, teamName, members: [] };
+    return addEntry(authedUser, newTeam, 'teams')
         .then((member) => {
             dispatch(addTeam(member));
         })
@@ -88,6 +88,19 @@ export const removeTeam = (teamId: string): RemoveTeamAction => ({
     type: TeamActionType.RemoveTeam,
     payload: teamId,
 });
+
+export const removeTeamFromDB = (
+    authedUser: AuthUser,
+    id: string
+): ThunkAction<Promise<void>, {}, {}, TeamActions> => (dispatch: Dispatch<RootStateActions>) => {
+    return firebaseRemoveEntry(authedUser, id, 'teams')
+        .then((removedUserId) => {
+            dispatch(removeTeam(removedUserId));
+        })
+        .catch((error) => {
+            console.error('Error adding member', error);
+        });
+};
 
 export const addTeamMember = (teamId: string, memberId: string): AddTeamMemberAction => ({
     type: TeamActionType.AddTeamMember,

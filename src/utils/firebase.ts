@@ -32,13 +32,22 @@ firebase.initializeApp(firebaseConfig);
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();
 
-export function updateEntry(user: AuthUser, entry: Member, key: 'members'): Promise<Member>;
-export function updateEntry(user: AuthUser, entry: Team, key: 'teams'): Promise<Team>;
-export function updateEntry( user: AuthUser, entry: Member | Team, key: 'members' | 'teams'): Promise<Member | Team> {
-    const userRef = firestore.collection(`users/${user.uid}/${key}`).doc(entry.id);
-    return userRef
+export function addEntry(user: AuthUser, entry: Member, key: 'members'): Promise<Member>;
+export function addEntry(user: AuthUser, entry: Team, key: 'teams'): Promise<Team>;
+export function addEntry( user: AuthUser, entry: Member | Team, key: 'members' | 'teams'): Promise<Member | Team> {
+    const entryRef = firestore.collection(`users/${user.uid}/${key}`).doc(entry.id);
+    return entryRef
         .set({ [entry.id]: entry })
         .then(() => entry)
+        .catch((error) => {
+            console.error(error);
+            return error;
+        });
+};
+
+export function firebaseRemoveEntry(user: AuthUser, id: string, key: 'members' | 'teams'): Promise<string> {
+        return firestore.collection(`users/${user.uid}/${key}`).doc(id).delete()
+        .then(() => id)
         .catch((error) => {
             console.error(error);
             return error;
