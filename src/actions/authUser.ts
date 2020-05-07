@@ -1,10 +1,12 @@
-export type AuthedUser = {
+import { Nullable } from '../utils/helpers';
+
+export type AuthUser = {
     uid: string;
     email?: string | null;
     displayName?: string | null;
 };
 
-export type AuthUser = AuthedUser | null;
+export type UserData = Nullable<AuthUser>;
 
 export enum AuthUserActionType {
     SetAuthedUser = 'SetAuthedUser',

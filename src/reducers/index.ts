@@ -1,7 +1,7 @@
 import { combineReducers, Reducer } from 'redux';
-import { AuthUser } from '../actions/authUser';
-import {  Members } from '../actions/members';
-import { Teams } from '../actions/teams';
+import { AuthUserActions, UserData } from '../actions/authUser';
+import { MemberActions, Members } from '../actions/members';
+import { TeamActions, Teams } from '../actions/teams';
 import { authUser } from './authUser';
 import { members } from './members';
 import { teams } from './teams';
@@ -9,11 +9,12 @@ import { teams } from './teams';
 export type RootStateType = {
     teams: Teams;
     members: Members;
-    authUser: AuthUser;
+    authUser: UserData;
 };
+export type RootStateActions = TeamActions | MemberActions | AuthUserActions;
 
-export const rootReducer: Reducer<RootStateType, any> = combineReducers({
-    teams,
+export const rootReducer: Reducer<RootStateType, RootStateActions> = combineReducers({
+    authUser,
     members,
-    authUser
+    teams,
 });

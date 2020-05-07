@@ -1,8 +1,8 @@
-import { AuthUser, AuthUserActions, AuthUserActionType } from '../actions/authUser';
+import { AuthUserActions, AuthUserActionType, UserData } from '../actions/authUser';
 
-const defautAuthUserState: AuthUser = null;
+const defautAuthUserState: UserData = null;
 
-export const authUser = (state: AuthUser = defautAuthUserState, action: AuthUserActions): AuthUser => {
+export const authUser = (state: UserData = defautAuthUserState, action: AuthUserActions): UserData => {
     switch (action.type) {
         case AuthUserActionType.SetAuthedUser:
             return action.payload;

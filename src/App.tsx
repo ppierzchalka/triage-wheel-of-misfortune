@@ -1,6 +1,6 @@
 import React, { Dispatch } from 'react';
 import { connect } from 'react-redux';
-import { AuthUser, signOut } from './actions/authUser';
+import { signOut, UserData } from './actions/authUser';
 import { addMemberToDB } from './actions/members';
 import { handleInitialData } from './actions/shared';
 import { addTeamToDB } from './actions/teams';
@@ -12,8 +12,8 @@ import { RootStateType } from './reducers';
 import { auth } from './utils/firebase';
 
 export type AppWrapperProps = {
-    authUser: AuthUser;
-    dispatch: Dispatch<any>;
+    authUser: UserData;
+    dispatch: Dispatch<any>
 }
 export type AppWrapperState = {
     isDrawerVisible: boolean;

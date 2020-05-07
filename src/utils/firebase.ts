@@ -1,7 +1,7 @@
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
-import { AuthedUser, AuthUser } from '../actions/authUser';
+import { AuthUser, UserData } from '../actions/authUser';
 import { Member } from '../actions/members';
 import { Team } from '../actions/teams';
 import { transformCollection } from './helpers';
@@ -32,9 +32,9 @@ firebase.initializeApp(firebaseConfig);
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();
 
-export function updateEntry(user: AuthedUser, entry: Member, key: 'members'): Promise<Member>;
-export function updateEntry(user: AuthedUser, entry: Team, key: 'teams'): Promise<Team>;
-export function updateEntry( user: AuthedUser, entry: Member | Team, key: 'members' | 'teams'): Promise<Member | Team> {
+export function updateEntry(user: AuthUser, entry: Member, key: 'members'): Promise<Member>;
+export function updateEntry(user: AuthUser, entry: Team, key: 'teams'): Promise<Team>;
+export function updateEntry( user: AuthUser, entry: Member | Team, key: 'members' | 'teams'): Promise<Member | Team> {
     const userRef = firestore.collection(`users/${user.uid}/${key}`).doc(entry.id);
     return userRef
         .set({ [entry.id]: entry })
@@ -45,7 +45,7 @@ export function updateEntry( user: AuthedUser, entry: Member | Team, key: 'membe
         });
 };
 
-export const generateUserDocument = async (user: AuthUser, additionalData?: any): Promise<any> => {
+export const generateUserDocument = async (user: UserData, additionalData?: any): Promise<any> => {
     if (user === null) {
         return;
     }
