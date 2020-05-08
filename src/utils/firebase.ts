@@ -32,12 +32,12 @@ firebase.initializeApp(firebaseConfig);
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();
 
-export function addEntry(user: AuthUser, entry: Member, key: 'members'): Promise<Member>;
-export function addEntry(user: AuthUser, entry: Team, key: 'teams'): Promise<Team>;
-export function addEntry( user: AuthUser, entry: Member | Team, key: 'members' | 'teams'): Promise<Member | Team> {
+export function firebaseAddEntry(user: AuthUser, entry: Member, key: 'members'): Promise<Member>;
+export function firebaseAddEntry(user: AuthUser, entry: Team, key: 'teams'): Promise<Team>;
+export function firebaseAddEntry( user: AuthUser, entry: Member | Team, key: 'members' | 'teams'): Promise<Member | Team> {
     const entryRef = firestore.collection(`users/${user.uid}/${key}`).doc(entry.id);
     return entryRef
-        .set({ [entry.id]: entry })
+        .set(entry)
         .then(() => entry)
         .catch((error) => {
             console.error(error);
@@ -53,6 +53,29 @@ export function firebaseRemoveEntry(user: AuthUser, id: string, key: 'members' |
             return error;
         });
 };
+
+export async function firebaseModifyMembers(user: AuthUser, teamId: string, memberId: string, add: boolean) {
+    const entryRef = firestore.collection(`users/${user.uid}/teams`).doc(teamId);
+    const document = await entryRef.get();
+    const entryData = document.data();
+    if (!entryData) {
+        return;
+    }
+    const entryMembers = entryData.members;
+    return entryRef
+        .set(
+            {
+                members: add
+                    ? [...entryMembers, memberId]
+                    : entryMembers.filter((member: string) => member !== memberId),
+            },
+            { merge: true }
+        )
+        .catch((error) => {
+            console.error(error);
+            return error;
+        });
+}
 
 export const generateUserDocument = async (user: UserData, additionalData?: any): Promise<any> => {
     if (user === null) {

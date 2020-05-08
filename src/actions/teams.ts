@@ -1,7 +1,7 @@
 import { Dispatch } from 'react';
 import { ThunkAction } from 'redux-thunk';
 import { RootStateActions } from '../reducers';
-import { addEntry, firebaseRemoveEntry } from '../utils/firebase';
+import { firebaseAddEntry, firebaseModifyMembers, firebaseRemoveEntry } from '../utils/firebase';
 import { generateUniqueId } from '../utils/helpers';
 import { AuthUser } from './authUser';
 
@@ -75,7 +75,7 @@ export const addTeamToDB = (
 ): ThunkAction<Promise<void>, {}, {}, TeamActions> => (dispatch: Dispatch<RootStateActions>) => {
     const id = generateUniqueId();
     const newTeam: Team = { id, teamName, members: [] };
-    return addEntry(authedUser, newTeam, 'teams')
+    return firebaseAddEntry(authedUser, newTeam, 'teams')
         .then((member) => {
             dispatch(addTeam(member));
         })
@@ -110,6 +110,20 @@ export const addTeamMember = (teamId: string, memberId: string): AddTeamMemberAc
     },
 });
 
+export const addTeamMemberToDB = (
+    authedUser: AuthUser,
+    teamId: string,
+    memberId: string
+): ThunkAction<Promise<void>, {}, {}, TeamActions> => (dispatch: Dispatch<RootStateActions>) => {
+    return firebaseModifyMembers(authedUser, teamId, memberId, true)
+        .then(() => {
+            dispatch(addTeamMember(teamId, memberId));
+        })
+        .catch((error) => {
+            console.error('Error adding team member', error);
+        });
+};
+
 export const removeTeamMember = (teamId: string, memberId: string): RemoveTeamMemberAction => ({
     type: TeamActionType.RemoveTeamMember,
     payload: {
@@ -117,3 +131,17 @@ export const removeTeamMember = (teamId: string, memberId: string): RemoveTeamMe
         memberId,
     },
 });
+
+export const RemoveTeamMemberFromDB = (
+    authedUser: AuthUser,
+    teamId: string,
+    memberId: string
+): ThunkAction<Promise<void>, {}, {}, TeamActions> => (dispatch: Dispatch<RootStateActions>) => {
+    return firebaseModifyMembers(authedUser, teamId, memberId, false)
+        .then(() => {
+            dispatch(removeTeamMember(teamId, memberId));
+        })
+        .catch((error) => {
+            console.error('Error removing team member', error);
+        });
+};

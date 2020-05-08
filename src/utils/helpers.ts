@@ -12,6 +12,6 @@ export const transformCollection = (
 ) => {
     return collection.docs.reduce((agg, curr) => {
         const currentDocument = curr.data();
-        return Object.assign(agg, currentDocument);
+        return Object.assign(agg, { [currentDocument.id]: currentDocument });
     }, {});
 };

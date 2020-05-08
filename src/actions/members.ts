@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 import { RootStateActions } from '../reducers';
-import { addEntry, firebaseRemoveEntry } from '../utils/firebase';
+import { firebaseAddEntry, firebaseRemoveEntry } from '../utils/firebase';
 import { generateUniqueId } from '../utils/helpers';
 import { AuthUser } from './authUser';
 
@@ -53,7 +53,7 @@ export const addMemberToDB = (
 ): ThunkAction<Promise<void>, {}, {}, MemberActions> => (dispatch: Dispatch<RootStateActions>) => {
     const id = generateUniqueId();
     const newMember: Member = { id, firstName, lastName };
-    return addEntry(authedUser, newMember, 'members')
+    return firebaseAddEntry(authedUser, newMember, 'members')
         .then((member) => {
             dispatch(addMember(member));
         })

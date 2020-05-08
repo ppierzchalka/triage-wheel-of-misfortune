@@ -1,9 +1,9 @@
 import React, { Dispatch } from 'react';
 import { connect } from 'react-redux';
 import { signOut, UserData } from './actions/authUser';
-import { addMemberToDB } from './actions/members';
+import { addMemberToDB, removeMemberFromDB } from './actions/members';
 import { handleInitialData } from './actions/shared';
-import { addTeamToDB } from './actions/teams';
+import { addTeamMemberToDB, addTeamToDB, removeTeamFromDB, RemoveTeamMemberFromDB } from './actions/teams';
 import { AnonymousDialog } from './components/AnonymousDialog/AnonymousDialog';
 import { BodyWrapper } from './components/BodyWrapper/BodyWrapper';
 import { Header } from './components/Header/Header';
@@ -53,9 +53,33 @@ class AppWrapper extends React.Component<AppWrapperProps, AppWrapperState> {
         }
     }
 
+    private handleClickRemoveMember = () => {
+        if (this.props.authUser) {
+            this.props.dispatch(removeMemberFromDB(this.props.authUser, '4nmkev0d2_1588890875230'))
+        }
+    }
+
     private handleClickTeam = () => {
         if (this.props.authUser) {
             this.props.dispatch(addTeamToDB(this.props.authUser, 'Przemek'))
+        }
+    }
+
+    private handleClickRemoveTeam = () => {
+        if (this.props.authUser) {
+            this.props.dispatch(removeTeamFromDB(this.props.authUser, '1ogncf9a8_1588890872447'))
+        }
+    }
+
+    private handleClickAddTeamMember = () => {
+        if (this.props.authUser) {
+            this.props.dispatch(addTeamMemberToDB(this.props.authUser, '1q0hse206_1588895197120', 'test'))
+        }
+    }
+
+    private handleClickRemoveTeamMember = () => {
+        if (this.props.authUser) {
+            this.props.dispatch(RemoveTeamMemberFromDB(this.props.authUser, '1q0hse206_1588895197120', 'test'))
         }
     }
 
@@ -65,8 +89,20 @@ class AppWrapper extends React.Component<AppWrapperProps, AppWrapperState> {
             <button onClick={this.handleClickMember}>
                 add member
             </button>
+            <button onClick={this.handleClickRemoveMember}>
+                remove member
+            </button>
             <button onClick={this.handleClickTeam}>
                 add team
+            </button>
+            <button onClick={this.handleClickRemoveTeam}>
+                remove team
+            </button>
+            <button onClick={this.handleClickAddTeamMember}>
+                add team member
+            </button>
+            <button onClick={this.handleClickRemoveTeamMember}>
+                remove team member
             </button>
         </div>
     )
