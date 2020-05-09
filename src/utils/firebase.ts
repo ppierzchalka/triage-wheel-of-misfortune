@@ -3,8 +3,8 @@ import 'firebase/auth';
 import 'firebase/firestore';
 import { AuthUser, UserData } from '../actions/authUser';
 import { Member } from '../actions/members';
-import { Team } from '../actions/teams';
-import { transformCollection } from './helpers';
+import { Team, Teams } from '../actions/teams';
+import { removeMemberFromTeams, transformCollection } from './helpers';
 
 export type FirebaseConfig = {
     apiKey: string;
@@ -16,6 +16,11 @@ export type FirebaseConfig = {
     appId: string;
     measurementId: string;
 };
+
+export enum ModifyOperation {
+    Add = 'Add',
+    Remove = 'Remove',
+}
 
 const firebaseConfig = {
     apiKey: '***REMOVED***',
@@ -32,52 +37,10 @@ firebase.initializeApp(firebaseConfig);
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();
 
-export function firebaseAddEntry(user: AuthUser, entry: Member, key: 'members'): Promise<Member>;
-export function firebaseAddEntry(user: AuthUser, entry: Team, key: 'teams'): Promise<Team>;
-export function firebaseAddEntry( user: AuthUser, entry: Member | Team, key: 'members' | 'teams'): Promise<Member | Team> {
-    const entryRef = firestore.collection(`users/${user.uid}/${key}`).doc(entry.id);
-    return entryRef
-        .set(entry)
-        .then(() => entry)
-        .catch((error) => {
-            console.error(error);
-            return error;
-        });
-};
-
-export function firebaseRemoveEntry(user: AuthUser, id: string, key: 'members' | 'teams'): Promise<string> {
-        return firestore.collection(`users/${user.uid}/${key}`).doc(id).delete()
-        .then(() => id)
-        .catch((error) => {
-            console.error(error);
-            return error;
-        });
-};
-
-export async function firebaseModifyMembers(user: AuthUser, teamId: string, memberId: string, add: boolean) {
-    const entryRef = firestore.collection(`users/${user.uid}/teams`).doc(teamId);
-    const document = await entryRef.get();
-    const entryData = document.data();
-    if (!entryData) {
-        return;
-    }
-    const entryMembers = entryData.members;
-    return entryRef
-        .set(
-            {
-                members: add
-                    ? [...entryMembers, memberId]
-                    : entryMembers.filter((member: string) => member !== memberId),
-            },
-            { merge: true }
-        )
-        .catch((error) => {
-            console.error(error);
-            return error;
-        });
-}
-
-export const generateUserDocument = async (user: UserData, additionalData?: any): Promise<any> => {
+export const firebaseGenerateUserDocument = async (
+    user: UserData,
+    additionalData?: any
+): Promise<any> => {
     if (user === null) {
         return;
     }
@@ -94,17 +57,17 @@ export const generateUserDocument = async (user: UserData, additionalData?: any)
             console.error('error creating user document', e);
         }
     }
-    return getUserDocument(user.uid);
+    return firebaseGetUserDocument(user.uid);
 };
 
-const getUserDocument = async (uid: string) => {
+const firebaseGetUserDocument = async (uid: string) => {
     if (!uid) {
         return null;
     }
     try {
         const userDocument = await firestore.doc(`users/${uid}`).get();
-        const userMembers = await firestore.collection((`users/${uid}/members`)).get()
-        const userTeams = await firestore.collection(`users/${uid}/teams`).get()
+        const userMembers = await firestore.collection(`users/${uid}/members`).get();
+        const userTeams = await firestore.collection(`users/${uid}/teams`).get();
         return {
             uid,
             members: transformCollection(userMembers),
@@ -116,3 +79,83 @@ const getUserDocument = async (uid: string) => {
         return null;
     }
 };
+
+export function firebaseAddEntry(
+    user: AuthUser,
+    entry: Member,
+    key: 'members'
+): Promise<Member | null>;
+export function firebaseAddEntry(user: AuthUser, entry: Team, key: 'teams'): Promise<Team | null>;
+export function firebaseAddEntry(
+    user: AuthUser,
+    entry: Member | Team,
+    key: 'members' | 'teams'
+): Promise<Member | Team | null> {
+    const entryRef = firestore.collection(`users/${user.uid}/${key}`).doc(entry.id);
+    return entryRef
+        .set(entry)
+        .then(() => entry)
+        .catch((error) => {
+            console.error(error);
+            return null;
+        });
+}
+
+export async function firebaseModifyMembers(
+    user: AuthUser,
+    teamId: string,
+    memberId: string,
+    operation: ModifyOperation
+) {
+    const entryRef = firestore.collection(`users/${user.uid}/teams`).doc(teamId);
+    const document = await entryRef.get();
+    const entryData = document.data();
+    if (!entryData) {
+        return;
+    }
+    const entryMembers = entryData.members;
+    return entryRef
+        .set(
+            {
+                members:
+                    operation === ModifyOperation.Add
+                        ? [...entryMembers, memberId]
+                        : entryMembers.filter((member: string) => member !== memberId),
+            },
+            { merge: true }
+        )
+        .catch((error) => {
+            console.error(error);
+            return error;
+        });
+}
+
+export function firebaseRemoveTeam(user: AuthUser, id: string) {
+    return firestore
+        .collection(`users/${user.uid}/teams`)
+        .doc(id)
+        .delete()
+        .then(() => id)
+        .catch((error) => {
+            console.error(error);
+            return null;
+        });
+}
+
+export function firebaseRemoveMember(user: AuthUser, id: string) {
+    const userMembers = firestore.collection(`users/${user.uid}/members`).doc(id).delete();
+    const userTeams = firestore.collection(`users/${user.uid}/teams`).get();
+
+    return Promise.all([userMembers, userTeams])
+        .then(([_members, teams]) => {
+            const newTeams = removeMemberFromTeams(transformCollection(teams) as Teams, id);
+            teams.forEach((team) => {
+                team.ref.set(newTeams[team.id]);
+            });
+        })
+        .then(() => id)
+        .catch((error) => {
+            console.error('error removing member', error);
+            return null;
+        });
+}

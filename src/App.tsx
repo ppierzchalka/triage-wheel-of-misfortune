@@ -55,7 +55,7 @@ class AppWrapper extends React.Component<AppWrapperProps, AppWrapperState> {
 
     private handleClickRemoveMember = () => {
         if (this.props.authUser) {
-            this.props.dispatch(removeMemberFromDB(this.props.authUser, '4nmkev0d2_1588890875230'))
+            this.props.dispatch(removeMemberFromDB(this.props.authUser, 'nzlj26rm0_1588895193889'))
         }
     }
 

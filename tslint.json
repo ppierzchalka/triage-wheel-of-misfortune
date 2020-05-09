@@ -30,7 +30,6 @@
         "ter-indent": false,
         "space-before-function-paren": false,
         "semicolon": false,
-        "prettier": true,
         "interface-name": false,
         "trailing-comma": false
     }

@@ -1,9 +1,14 @@
 import { AuthUserActions, AuthUserActionType } from '../actions/authUser';
+import { MemberActions, MembersActionType } from '../actions/members';
 import { TeamActions, TeamActionType, Teams } from '../actions/teams';
+import { removeMemberFromTeams } from '../utils/helpers';
 
 const initialTeamsState: Teams = {};
 
-export const teams = (state = initialTeamsState, action: TeamActions | AuthUserActions): Teams => {
+export const teams = (
+    state = initialTeamsState,
+    action: TeamActions | MemberActions | AuthUserActions
+): Teams => {
     switch (action.type) {
         case TeamActionType.ReceiveTeams: {
             return {
@@ -43,6 +48,9 @@ export const teams = (state = initialTeamsState, action: TeamActions | AuthUserA
                     members: newMembers,
                 },
             };
+        }
+        case MembersActionType.RemoveMember: {
+            return removeMemberFromTeams(state, action.payload);
         }
         case AuthUserActionType.UnsetAuthedUser:
             return initialTeamsState;

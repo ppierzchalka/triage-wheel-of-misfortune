@@ -1,7 +1,12 @@
 import { Dispatch } from 'react';
 import { ThunkAction } from 'redux-thunk';
 import { RootStateActions } from '../reducers';
-import { firebaseAddEntry, firebaseModifyMembers, firebaseRemoveEntry } from '../utils/firebase';
+import {
+    firebaseAddEntry,
+    firebaseModifyMembers,
+    firebaseRemoveTeam,
+    ModifyOperation,
+} from '../utils/firebase';
 import { generateUniqueId } from '../utils/helpers';
 import { AuthUser } from './authUser';
 
@@ -77,7 +82,9 @@ export const addTeamToDB = (
     const newTeam: Team = { id, teamName, members: [] };
     return firebaseAddEntry(authedUser, newTeam, 'teams')
         .then((member) => {
-            dispatch(addTeam(member));
+            if (member) {
+                dispatch(addTeam(member));
+            }
         })
         .catch((error) => {
             console.error('Error adding member', error);
@@ -93,9 +100,11 @@ export const removeTeamFromDB = (
     authedUser: AuthUser,
     id: string
 ): ThunkAction<Promise<void>, {}, {}, TeamActions> => (dispatch: Dispatch<RootStateActions>) => {
-    return firebaseRemoveEntry(authedUser, id, 'teams')
+    return firebaseRemoveTeam(authedUser, id)
         .then((removedUserId) => {
-            dispatch(removeTeam(removedUserId));
+            if (removedUserId) {
+                dispatch(removeTeam(removedUserId));
+            }
         })
         .catch((error) => {
             console.error('Error adding member', error);
@@ -115,7 +124,7 @@ export const addTeamMemberToDB = (
     teamId: string,
     memberId: string
 ): ThunkAction<Promise<void>, {}, {}, TeamActions> => (dispatch: Dispatch<RootStateActions>) => {
-    return firebaseModifyMembers(authedUser, teamId, memberId, true)
+    return firebaseModifyMembers(authedUser, teamId, memberId, ModifyOperation.Add)
         .then(() => {
             dispatch(addTeamMember(teamId, memberId));
         })
@@ -137,7 +146,7 @@ export const RemoveTeamMemberFromDB = (
     teamId: string,
     memberId: string
 ): ThunkAction<Promise<void>, {}, {}, TeamActions> => (dispatch: Dispatch<RootStateActions>) => {
-    return firebaseModifyMembers(authedUser, teamId, memberId, false)
+    return firebaseModifyMembers(authedUser, teamId, memberId, ModifyOperation.Remove)
         .then(() => {
             dispatch(removeTeamMember(teamId, memberId));
         })

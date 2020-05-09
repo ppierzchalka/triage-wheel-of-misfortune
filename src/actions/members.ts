@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 import { RootStateActions } from '../reducers';
-import { firebaseAddEntry, firebaseRemoveEntry } from '../utils/firebase';
+import { firebaseAddEntry, firebaseRemoveMember } from '../utils/firebase';
 import { generateUniqueId } from '../utils/helpers';
 import { AuthUser } from './authUser';
 
@@ -55,7 +55,9 @@ export const addMemberToDB = (
     const newMember: Member = { id, firstName, lastName };
     return firebaseAddEntry(authedUser, newMember, 'members')
         .then((member) => {
-            dispatch(addMember(member));
+            if (member) {
+                dispatch(addMember(member));
+            }
         })
         .catch((error) => {
             console.error('Error adding member', error);
@@ -71,9 +73,11 @@ export const removeMemberFromDB = (
     authedUser: AuthUser,
     id: string
 ): ThunkAction<Promise<void>, {}, {}, MemberActions> => (dispatch: Dispatch<RootStateActions>) => {
-    return firebaseRemoveEntry(authedUser, id, 'members')
+    return firebaseRemoveMember(authedUser, id)
         .then((removedUserId) => {
-            dispatch(removeMember(removedUserId));
+            if (removedUserId) {
+                dispatch(removeMember(removedUserId));
+            }
         })
         .catch((error) => {
             console.error('Error adding member', error);

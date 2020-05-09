@@ -1,6 +1,6 @@
 import { Button, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from '@material-ui/core';
 import React, { useMemo, useState } from 'react';
-import { auth, generateUserDocument } from '../../utils/firebase';
+import { auth, firebaseGenerateUserDocument } from '../../utils/firebase';
 import { ModalView } from './AnonymousDialog';
 import { LoadingIndicator } from './LoadingIndicator';
 
@@ -45,7 +45,7 @@ export const SignUpBody: React.FC<SignUpBodyProps> = ({ onSetModalView, onClose 
             try {
                 const { user } = await auth.createUserWithEmailAndPassword(email, password)
                 setShowLoadingIndicator(false);
-                generateUserDocument(user, { displayName: name })
+                firebaseGenerateUserDocument(user, { displayName: name })
             } catch (error) {
                 setShowLoadingIndicator(false);
                 if (error.code.includes('password') && mounted) {
