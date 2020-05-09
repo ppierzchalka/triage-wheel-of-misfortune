@@ -20,6 +20,7 @@ export type AppWrapperProps = {
     authUser: UserData;
     dispatch: Dispatch<any>;
 };
+
 export type AppWrapperState = {
     isDrawerVisible: boolean;
     isModalVisible: boolean;
