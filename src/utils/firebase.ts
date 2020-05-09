@@ -150,7 +150,15 @@ export function firebaseRemoveMember(user: AuthUser, id: string) {
         .then(([_members, teams]) => {
             const newTeams = removeMemberFromTeams(transformCollection(teams) as Teams, id);
             teams.forEach((team) => {
-                team.ref.set(newTeams[team.id]);
+                team.ref
+                    .set(newTeams[team.id])
+                    .then(() => {
+                        return id;
+                    })
+                    .catch((error) => {
+                        console.error(`error removing member: ${id} from team: ${team.id}`, error);
+                        return error;
+                    });
             });
         })
         .then(() => id)
