@@ -12,7 +12,13 @@ export const handleInitialData = (): ThunkAction<void, {}, {}, RootStateActions>
     auth.onAuthStateChanged(async (authUser) => {
         const authUserData = await firebaseGenerateUserDocument(authUser);
         if (authUserData) {
-            dispatch(signIn(authUserData));
+            dispatch(
+                signIn({
+                    displayName: authUserData.displayName,
+                    email: authUserData.email,
+                    uid: authUserData.uid,
+                })
+            );
             dispatch(receiveMembers(authUserData.members));
             dispatch(receiveTeams(authUserData.teams));
         }
