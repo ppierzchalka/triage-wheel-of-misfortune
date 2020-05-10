@@ -121,7 +121,6 @@ const dummyData = {
     },
 };
 
-
 export const getTeams = (): Promise<string> => {
     return new Promise((res, _rej) => {
         setTimeout(() => res(JSON.stringify(dummyData)), 1000);

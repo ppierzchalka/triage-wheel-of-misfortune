@@ -1,4 +1,11 @@
-import { Button, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from '@material-ui/core';
+import {
+    Button,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    TextField,
+} from '@material-ui/core';
 import React, { useMemo, useState } from 'react';
 import { auth, firebaseGenerateUserDocument } from '../../utils/firebase';
 import { ModalView } from './AnonymousDialog';
@@ -7,7 +14,7 @@ import { LoadingIndicator } from './LoadingIndicator';
 export type SignUpBodyProps = {
     onSetModalView: (modalView: ModalView) => void;
     onClose: VoidFunction;
-}
+};
 
 export const SignUpBody: React.FC<SignUpBodyProps> = ({ onSetModalView, onClose }) => {
     let mounted = true;
@@ -17,11 +24,11 @@ export const SignUpBody: React.FC<SignUpBodyProps> = ({ onSetModalView, onClose 
     const [password, setPassword] = useState<string>('');
     const [repeatedPassword, setRepeatedPassword] = useState<string>('');
     const [emailError, setEmailError] = useState<string>('');
-    const [passwordError, setPasswordError] = useState<string>('')
+    const [passwordError, setPasswordError] = useState<string>('');
 
     const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         if (!mounted) {
-            return
+            return;
         }
         const { id, value } = event.currentTarget;
         if (id === 'name') {
@@ -38,67 +45,70 @@ export const SignUpBody: React.FC<SignUpBodyProps> = ({ onSetModalView, onClose 
         }
     };
 
-    const handleSignUp = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent<HTMLFormElement>) => {
+    const handleSignUp = async (
+        event: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent<HTMLFormElement>
+    ) => {
         event.preventDefault();
         setShowLoadingIndicator(true);
         if (mounted) {
             try {
-                const { user } = await auth.createUserWithEmailAndPassword(email, password)
+                const { user } = await auth.createUserWithEmailAndPassword(email, password);
                 setShowLoadingIndicator(false);
-                firebaseGenerateUserDocument(user, { displayName: name })
+                firebaseGenerateUserDocument(user, { displayName: name }).catch((error) => {
+                    console.error('error in SignUpBody:', error);
+                });
             } catch (error) {
                 setShowLoadingIndicator(false);
                 if (error.code.includes('password') && mounted) {
-                    setPasswordError(error.message)
+                    setPasswordError(error.message);
                 }
                 if (error.code.includes('email') && mounted) {
-                    setEmailError(error.message)
+                    setEmailError(error.message);
                 }
-                console.error('Error while signing up', error)
+                console.error('Error while signing up', error);
             }
         }
-    }
+    };
 
     const handleClose = () => {
         mounted = false;
-        onClose()
-    }
+        onClose();
+    };
 
     const verifiedPassword = useMemo(() => {
         if (password !== '' && repeatedPassword !== '') {
             return password === repeatedPassword;
         }
         return true;
-    }, [password, repeatedPassword])
+    }, [password, repeatedPassword]);
 
     const isFormCorrect = useMemo(() => {
-        return password !== ''
-            && repeatedPassword !== ''
-            && email !== ''
-            && emailError === ''
-            && passwordError === ''
-            && verifiedPassword
-    }, [email, password, repeatedPassword, emailError, passwordError, verifiedPassword])
+        return (
+            password !== '' &&
+            repeatedPassword !== '' &&
+            email !== '' &&
+            emailError === '' &&
+            passwordError === '' &&
+            verifiedPassword
+        );
+    }, [email, password, repeatedPassword, emailError, passwordError, verifiedPassword]);
 
     const passwordHelperText = useMemo(() => {
         if (passwordError !== '') {
             return passwordError;
         }
         if (password !== repeatedPassword && repeatedPassword !== '') {
-            return 'Passwords do not match.'
+            return 'Passwords do not match.';
         }
         return undefined;
-    }, [password, repeatedPassword, passwordError])
+    }, [password, repeatedPassword, passwordError]);
 
     return (
         <React.Fragment>
             <DialogTitle>Sign Up</DialogTitle>
             <DialogContent>
-                {showLoadingIndicator &&
-                    <LoadingIndicator />}
-                <DialogContentText>
-                    Register a new account
-            </DialogContentText>
+                {showLoadingIndicator && <LoadingIndicator />}
+                <DialogContentText>Register a new account</DialogContentText>
                 <form onSubmit={handleSignUp} className="anonymous-dialog__form">
                     <TextField
                         value={name}
@@ -154,8 +164,7 @@ export const SignUpBody: React.FC<SignUpBodyProps> = ({ onSetModalView, onClose 
                 </form>
                 <div className="anonymous-dialog__bottom-text">
                     <DialogContentText>
-                        Have an account?
-                        {' '}
+                        Have an account?{' '}
                         <button
                             className="anonymous-dialog__bottom-button"
                             onClick={() => onSetModalView(ModalView.SignIn)}
@@ -171,5 +180,5 @@ export const SignUpBody: React.FC<SignUpBodyProps> = ({ onSetModalView, onClose 
                 </Button>
             </DialogActions>
         </React.Fragment>
-    )
-}
+    );
+};

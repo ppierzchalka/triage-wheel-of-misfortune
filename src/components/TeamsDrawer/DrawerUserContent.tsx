@@ -7,18 +7,18 @@ import { DrawerTeamsList } from './DrawerTeamsList';
 
 export type DrawerUserContentProps = {
     closeButton: React.ReactElement;
-}
+};
 
-export const DrawerUserContent: React.FC<DrawerUserContentProps> = ({closeButton}) => {
+export const DrawerUserContent: React.FC<DrawerUserContentProps> = ({ closeButton }) => {
     const [value, setValue] = useState<number>(0);
 
     const handleChange = (_e: React.ChangeEvent<{}>, tabValue: number) => {
         setValue(tabValue);
-    }
+    };
 
     return (
         <div className={'drawer__bar-container'}>
-            <Paper square classes={{root: 'drawer__bar'}}>
+            <Paper square classes={{ root: 'drawer__bar' }}>
                 <Tabs
                     indicatorColor="primary"
                     textColor="primary"
@@ -29,9 +29,7 @@ export const DrawerUserContent: React.FC<DrawerUserContentProps> = ({closeButton
                     <Tab label={<Group />} value={0} />
                     <Tab label={<Person />} value={1} />
                 </Tabs>
-                <div className={'drawer__close-button-wrapper'}>
-                    {closeButton}
-                </div>
+                <div className={'drawer__close-button-wrapper'}>{closeButton}</div>
             </Paper>
             <TabContent value={value} index={0}>
                 <DrawerTeamsList />
@@ -40,5 +38,5 @@ export const DrawerUserContent: React.FC<DrawerUserContentProps> = ({closeButton
                 <DrawerMembersList />
             </TabContent>
         </div>
-    )
-}
+    );
+};
