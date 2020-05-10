@@ -1,6 +1,9 @@
 import { Paper, Tab, Tabs } from '@material-ui/core';
 import { Group, Person } from '@material-ui/icons';
-import React, { useState } from 'react';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { changeSelectionType, SelectionType } from '../../actions/selection';
+import { RootStateType } from '../../reducers';
 import { TabContent } from '../TabContent/TabContent';
 import { DrawerMembersList } from './DrawerMembersList';
 import { DrawerTeamsList } from './DrawerTeamsList';
@@ -10,10 +13,11 @@ export type DrawerUserContentProps = {
 };
 
 export const DrawerUserContent: React.FC<DrawerUserContentProps> = ({ closeButton }) => {
-    const [value, setValue] = useState<number>(0);
+    const selectionType = useSelector((state: RootStateType) => state.selection.selectionType);
+    const dispatch = useDispatch();
 
-    const handleChange = (_e: React.ChangeEvent<{}>, tabValue: number) => {
-        setValue(tabValue);
+    const handleChange = (_e: React.ChangeEvent<{}>, tabValue: SelectionType) => {
+        dispatch(changeSelectionType(tabValue));
     };
 
     return (
@@ -22,19 +26,19 @@ export const DrawerUserContent: React.FC<DrawerUserContentProps> = ({ closeButto
                 <Tabs
                     indicatorColor="primary"
                     textColor="primary"
-                    value={value}
+                    value={selectionType}
                     onChange={handleChange}
                     classes={{ root: 'drawer__tabs' }}
                 >
-                    <Tab label={<Group />} value={0} />
-                    <Tab label={<Person />} value={1} />
+                    <Tab label={<Group />} value={SelectionType.Teams} />
+                    <Tab label={<Person />} value={SelectionType.Members} />
                 </Tabs>
                 <div className={'drawer__close-button-wrapper'}>{closeButton}</div>
             </Paper>
-            <TabContent value={value} index={0}>
+            <TabContent<SelectionType> value={selectionType} index={SelectionType.Teams}>
                 <DrawerTeamsList />
             </TabContent>
-            <TabContent value={value} index={1}>
+            <TabContent<SelectionType> value={selectionType} index={SelectionType.Members}>
                 <DrawerMembersList />
             </TabContent>
         </div>

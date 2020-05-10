@@ -1,3 +1,4 @@
+import { Container } from '@material-ui/core';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { RootStateType } from '../../reducers';
@@ -5,7 +6,7 @@ import { RootStateType } from '../../reducers';
 export const DrawerTeamsList: React.FC = () => {
     const teams = useSelector((state: RootStateType) => state.teams);
     return (
-        <div>
+        <Container>
             {Object.values(teams).map((team, teamIndex) => (
                 <div key={teamIndex}>
                     <p>{team.teamName}</p>
@@ -14,6 +15,6 @@ export const DrawerTeamsList: React.FC = () => {
                     ))}
                 </div>
             ))}
-        </div>
-    )
-}
+        </Container>
+    );
+};

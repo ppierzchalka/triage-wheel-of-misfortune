@@ -1,12 +1,11 @@
 import React from 'react';
 
-export type TabContentProps = {
+export type TabContentProps<T> = {
     children?: React.ReactNode;
-    index: number;
-    value: number;
-}
+    index: T;
+    value: T;
+};
 
-export const TabContent: React.FC<TabContentProps> = ({ children, index, value }) => {
-    return index === value
-        ? <div> {children}</div> : null;
-}
+export const TabContent = <T,>({ children, index, value }: TabContentProps<T>) => {
+    return index === value ? <div> {children}</div> : null;
+};
