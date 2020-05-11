@@ -4,6 +4,7 @@ import 'firebase/firestore';
 import { AuthUser, UserData } from '../actions/authUser';
 import { Member } from '../actions/members';
 import { Team, Teams } from '../actions/teams';
+import { firebaseConfig } from './credentials';
 import { removeMemberFromTeams, transformCollection } from './helpers';
 
 export type FirebaseConfig = {
@@ -21,17 +22,6 @@ export enum ModifyOperation {
     Add = 'Add',
     Remove = 'Remove',
 }
-
-const firebaseConfig = {
-    apiKey: '---replaced---',
-    authDomain: '---replaced---',
-    databaseURL: '---replaced---',
-    projectId: '---replaced---',
-    storageBucket: '---replaced---',
-    messagingSenderId: '---replaced---',
-    appId: '---replaced---',
-    measurementId: '---replaced---',
-};
 
 firebase.initializeApp(firebaseConfig);
 export const auth = firebase.auth();
