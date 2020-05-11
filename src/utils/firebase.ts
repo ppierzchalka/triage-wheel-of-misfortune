@@ -23,14 +23,14 @@ export enum ModifyOperation {
 }
 
 const firebaseConfig = {
-    apiKey: '***REMOVED***',
-    authDomain: '***REMOVED***',
-    databaseURL: '***REMOVED***',
-    projectId: 'triage-wheel-of-misfortune',
-    storageBucket: '***REMOVED***',
-    messagingSenderId: '***REMOVED***',
-    appId: '1:***REMOVED***:web:0f775cea90d9ad3bb7adb3',
-    measurementId: '***REMOVED***',
+    apiKey: '---replaced---',
+    authDomain: '---replaced---',
+    databaseURL: '---replaced---',
+    projectId: '---replaced---',
+    storageBucket: '---replaced---',
+    messagingSenderId: '---replaced---',
+    appId: '---replaced---',
+    measurementId: '---replaced---',
 };
 
 firebase.initializeApp(firebaseConfig);
