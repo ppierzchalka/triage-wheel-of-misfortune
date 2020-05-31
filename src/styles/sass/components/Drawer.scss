@@ -42,4 +42,26 @@
             flex-direction: row;
         }
     }
+    .drawer__tab-content {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        .drawer-list__container {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            padding-bottom: 15px;
+            .drawer-list__content {
+                flex-grow: 1;
+            }
+        }
+        .drawer-tab__footer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            .drawer-tab__footer-button {
+                flex-grow: 1;
+            }
+        }
+    }
 }

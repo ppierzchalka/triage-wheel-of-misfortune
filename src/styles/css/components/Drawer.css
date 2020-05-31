@@ -43,3 +43,26 @@
     align-items: center;
     flex-direction: row;
 }
+
+.drawer .drawer__tab-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+.drawer .drawer__tab-content .drawer-list__container {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 15px;
+}
+.drawer .drawer__tab-content .drawer-list__container .drawer-list__content {
+    flex-grow: 1;
+}
+.drawer .drawer__tab-content .drawer-tab__footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.drawer .drawer__tab-content .drawer-tab__footer .drawer-tab__footer-button {
+    flex-grow: 1;
+}

@@ -21,26 +21,28 @@ export const DrawerUserContent: React.FC<DrawerUserContentProps> = ({ closeButto
     };
 
     return (
-        <div className={'drawer__bar-container'}>
-            <Paper square classes={{ root: 'drawer__bar' }}>
-                <Tabs
-                    indicatorColor="primary"
-                    textColor="primary"
-                    value={selectionType}
-                    onChange={handleChange}
-                    classes={{ root: 'drawer__tabs' }}
-                >
-                    <Tab label={<Group />} value={SelectionType.Teams} />
-                    <Tab label={<Person />} value={SelectionType.Members} />
-                </Tabs>
-                <div className={'drawer__close-button-wrapper'}>{closeButton}</div>
-            </Paper>
+        <React.Fragment>
+            <div className={'drawer__bar-container'}>
+                <Paper square classes={{ root: 'drawer__bar' }}>
+                    <Tabs
+                        indicatorColor="primary"
+                        textColor="primary"
+                        value={selectionType}
+                        onChange={handleChange}
+                        classes={{ root: 'drawer__tabs' }}
+                    >
+                        <Tab label={<Group />} value={SelectionType.Teams} />
+                        <Tab label={<Person />} value={SelectionType.Members} />
+                    </Tabs>
+                    <div className={'drawer__close-button-wrapper'}>{closeButton}</div>
+                </Paper>
+            </div>
             <TabContent<SelectionType> value={selectionType} index={SelectionType.Teams}>
                 <DrawerTeamsList />
             </TabContent>
             <TabContent<SelectionType> value={selectionType} index={SelectionType.Members}>
                 <DrawerMembersList />
             </TabContent>
-        </div>
+        </React.Fragment>
     );
 };

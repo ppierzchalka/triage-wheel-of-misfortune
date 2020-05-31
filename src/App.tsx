@@ -85,7 +85,7 @@ class AppWrapper extends React.Component<AppWrapperProps, AppWrapperState> {
     private handleClickAddTeamMember = () => {
         if (this.props.authUser) {
             this.props.dispatch(
-                addTeamMemberToDB(this.props.authUser, '1q0hse206_1588895197120', 'test')
+                addTeamMemberToDB(this.props.authUser, '0ryzjm2zx_1588896122718', 'test')
             );
         }
     };

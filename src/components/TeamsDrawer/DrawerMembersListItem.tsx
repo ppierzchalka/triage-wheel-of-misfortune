@@ -16,7 +16,7 @@ export type DrawerListItemProps = {
     onDeleteAction: VoidFunction;
 };
 
-export const DrawerListItem: React.FC<DrawerListItemProps> = ({
+export const DrawerMembersListItem: React.FC<DrawerListItemProps> = ({
     onPrimaryAction,
     selected,
     label,
