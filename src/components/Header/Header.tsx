@@ -16,12 +16,7 @@ export const Header: React.FC<HeaderProps> = ({ onToggleDrawer, onShowLoginModal
     return (
         <AppBar position="static" classes={{ root: 'app-bar' }}>
             <Toolbar classes={{ root: 'app-bar__toolbar' }}>
-                <IconButton
-                    edge="start"
-                    color="inherit"
-                    aria-label="Teams Menu"
-                    onClick={onToggleDrawer}
-                >
+                <IconButton edge="start" color="inherit" onClick={onToggleDrawer}>
                     <Menu />
                 </IconButton>
                 <Typography variant="h1" className={'app_bar__title'}>

@@ -11,30 +11,42 @@ export type TeamsDrawerProps = {
     isOpen: boolean;
     onShowLoginModal: VoidFunction;
     onClose: VoidFunction;
-}
+};
 
 export const TeamsDrawer: React.FC<TeamsDrawerProps> = ({
     anchor,
     isOpen,
     onClose,
-    onShowLoginModal
+    onShowLoginModal,
 }) => {
     const authUser = useSelector((state: RootStateType) => state.authUser);
 
-    const renderCloseButton = useMemo(() => (
-        <IconButton edge="start" color="inherit" aria-label="Close" onClick={onClose} classes={{ root: 'drawer__close-button' }}>
-            <Close />
-        </IconButton>
-    ), [onClose])
+    const renderCloseButton = useMemo(
+        () => (
+            <IconButton
+                edge="start"
+                color="inherit"
+                onClick={onClose}
+                classes={{ root: 'drawer__close-button' }}
+            >
+                <Close />
+            </IconButton>
+        ),
+        [onClose]
+    );
 
     return (
         <Drawer anchor={anchor} open={isOpen} onClose={onClose} classes={{ root: 'drawer' }}>
             <Container classes={{ root: 'drawer__wrapper' }}>
-                {authUser
-                    ? <DrawerUserContent closeButton={renderCloseButton} />
-                    : <DrawerSignUpContent closeButton={renderCloseButton} onShowLoginModal={onShowLoginModal}/>
-                }
+                {authUser ? (
+                    <DrawerUserContent closeButton={renderCloseButton} />
+                ) : (
+                    <DrawerSignUpContent
+                        closeButton={renderCloseButton}
+                        onShowLoginModal={onShowLoginModal}
+                    />
+                )}
             </Container>
         </Drawer>
-    )
-}
+    );
+};

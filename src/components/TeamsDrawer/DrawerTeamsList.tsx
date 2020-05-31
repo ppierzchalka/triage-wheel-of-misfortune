@@ -79,11 +79,8 @@ export const DrawerTeamsList: React.FC = () => {
 
     return (
         <DrawerListWrapper addButtonLabel="Add new team" renderDialogContent={renderDialogContent}>
-            <List
-                classes={{ root: 'drawer-list__content' }}
-                component="nav"
-                subheader={<ListSubheader component="div">Teams</ListSubheader>}
-            >
+            <ListSubheader component="div">Teams</ListSubheader>
+            <List classes={{ root: 'drawer-list__content' }} component="div">
                 {Object.values(teams).map((team, teamIndex) => (
                     <DrawerTeamsListItem
                         key={teamIndex}

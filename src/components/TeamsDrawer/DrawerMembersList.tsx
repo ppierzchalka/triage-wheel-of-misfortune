@@ -93,11 +93,8 @@ export const DrawerMembersList: React.FC = () => {
             addButtonLabel="Add new member"
             renderDialogContent={renderDialogContent}
         >
-            <List
-                classes={{ root: 'drawer-list__content' }}
-                component="nav"
-                subheader={<ListSubheader component="div">Members</ListSubheader>}
-            >
+            <ListSubheader component="div">Members</ListSubheader>
+            <List classes={{ root: 'drawer-list__content' }} component="div">
                 {Object.values(members).map((member, memberIndex) => (
                     <DrawerMembersListItem
                         key={memberIndex}

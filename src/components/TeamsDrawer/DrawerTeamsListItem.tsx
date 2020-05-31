@@ -51,16 +51,12 @@ export const DrawerTeamsListItem: React.FC<DrawerTeamsListItemProps> = ({
                     secondary={Object.values(members).length === 0 && 'No members'}
                 />
                 {Object.values(members).length > 0 && (
-                    <IconButton
-                        edge="end"
-                        aria-label="comments"
-                        onClick={(e) => handleToggleOpen(e)}
-                    >
+                    <IconButton edge="end" onClick={(e) => handleToggleOpen(e)}>
                         {open ? <ExpandLess color="action" /> : <ExpandMore color="action" />}
                     </IconButton>
                 )}
                 <ListItemSecondaryAction>
-                    <IconButton edge="end" aria-label="comments" onClick={onDeleteAction}>
+                    <IconButton edge="end" onClick={onDeleteAction}>
                         <Delete color="action" />
                     </IconButton>
                 </ListItemSecondaryAction>

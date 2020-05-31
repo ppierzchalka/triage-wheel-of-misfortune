@@ -35,7 +35,7 @@ export const DrawerMembersListItem: React.FC<DrawerListItemProps> = ({
             </ListItemIcon>
             <ListItemText classes={{ root: 'member-list__label' }} primary={label} />
             <ListItemSecondaryAction>
-                <IconButton edge="end" aria-label="comments" onClick={onDeleteAction}>
+                <IconButton edge="end" onClick={onDeleteAction}>
                     <Delete color="action" />
                 </IconButton>
             </ListItemSecondaryAction>
