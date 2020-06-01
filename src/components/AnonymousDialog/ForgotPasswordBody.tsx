@@ -77,7 +77,7 @@ export const ForgotPasswordBody: React.FC<ForgotPasswordBodyProps> = ({
                             fullWidth
                             error={emailError !== ''}
                             helperText={emailError !== '' && emailError}
-                            onChange={(event) => onChangeHandler(event)}
+                            onChange={onChangeHandler}
                         />
                         <Button
                             classes={{ root: 'anonymous-dialog__submit' }}

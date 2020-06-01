@@ -11,7 +11,7 @@ import {
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { receiveSelection } from '../../actions/selection';
-import { addTeamToDB, removeTeamFromDB } from '../../actions/teams';
+import { addTeamToDB } from '../../actions/teams';
 import { RootStateType } from '../../reducers';
 import { DrawerListWrapper } from './DrawerListWrapper';
 import { DrawerTeamsListItem } from './DrawerTeamsListItem';
@@ -20,12 +20,6 @@ export const DrawerTeamsList: React.FC = () => {
     const [teamName, setTeamName] = useState<string>('');
     const { teams, authUser, selection } = useSelector((state: RootStateType) => state);
     const dispatch = useDispatch();
-
-    const handleRemoveTeam = (id: string) => {
-        if (authUser) {
-            dispatch(removeTeamFromDB(authUser, id));
-        }
-    };
 
     const handleAddTeam = (handleClose: VoidFunction) => {
         if (authUser && teamName !== '') {
@@ -44,6 +38,8 @@ export const DrawerTeamsList: React.FC = () => {
             : selection.selection.filter((member) => member !== id);
         dispatch(receiveSelection(newSelection));
     };
+
+    const handleManageMembers = (teamId: string) => console.log(teamId);
 
     const renderDialogContent = (handleClose: VoidFunction) => {
         return (
@@ -86,12 +82,11 @@ export const DrawerTeamsList: React.FC = () => {
             <List classes={{ root: 'drawer-list__content' }} component="div">
                 {Object.values(teams).map((team, teamIndex) => (
                     <DrawerTeamsListItem
+                        onManageMembers={handleManageMembers}
                         key={teamIndex}
-                        label={team.teamName}
-                        members={team.members}
+                        team={team}
                         selected={selection.selection.includes(team.id)}
                         onPrimaryAction={(checked: boolean) => handleSelectTeam(team.id, checked)}
-                        onDeleteAction={() => handleRemoveTeam(team.id)}
                     />
                 ))}
             </List>

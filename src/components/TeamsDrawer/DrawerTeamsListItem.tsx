@@ -7,30 +7,52 @@ import {
     ListItemIcon,
     ListItemSecondaryAction,
     ListItemText,
+    Menu,
+    MenuItem,
+    Typography,
 } from '@material-ui/core';
-import { Delete, ExpandLess, ExpandMore, Person } from '@material-ui/icons';
+import { Delete, ExpandLess, ExpandMore, GroupAdd, MoreVert, Person } from '@material-ui/icons';
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { removeTeamFromDB, Team } from '../../actions/teams';
+import { RootStateType } from '../../reducers';
 
 export type DrawerTeamsListItemProps = {
-    members: string[];
-    label: string;
+    team: Team;
     selected: boolean;
     onPrimaryAction: (checked: boolean) => void;
-    onDeleteAction: VoidFunction;
+    onManageMembers: (teamId: string) => void;
 };
 
 export const DrawerTeamsListItem: React.FC<DrawerTeamsListItemProps> = ({
-    members,
-    label,
+    team,
     selected,
+    onManageMembers,
     onPrimaryAction,
-    onDeleteAction,
 }) => {
-    const [open, setOpen] = useState<boolean>(false);
+    const [isListOpen, setIsListOpen] = useState<boolean>(false);
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const { authUser } = useSelector((state: RootStateType) => state);
+    const dispatch = useDispatch();
+
+    const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    const handleRemoveTeam = () => {
+        if (authUser) {
+            dispatch(removeTeamFromDB(authUser, team.id));
+            handleClose();
+        }
+    };
 
     const handleToggleOpen = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.stopPropagation();
-        setOpen(!open);
+        setIsListOpen(!isListOpen);
     };
 
     return (
@@ -47,24 +69,43 @@ export const DrawerTeamsListItem: React.FC<DrawerTeamsListItemProps> = ({
                 </ListItemIcon>
                 <ListItemText
                     classes={{ root: 'member-list__label' }}
-                    primary={label}
-                    secondary={Object.values(members).length === 0 && 'No members'}
+                    primary={team.teamName}
+                    secondary={Object.values(team.members).length === 0 && 'No members'}
                 />
-                {Object.values(members).length > 0 && (
-                    <IconButton edge="end" onClick={(e) => handleToggleOpen(e)}>
-                        {open ? <ExpandLess color="action" /> : <ExpandMore color="action" />}
+                {Object.values(team.members).length > 0 && (
+                    <IconButton edge="end" onClick={handleToggleOpen}>
+                        {isListOpen ? <ExpandLess color="action" /> : <ExpandMore color="action" />}
                     </IconButton>
                 )}
                 <ListItemSecondaryAction>
-                    <IconButton edge="end" onClick={onDeleteAction}>
-                        <Delete color="action" />
+                    <IconButton onClick={handleClick}>
+                        <MoreVert />
                     </IconButton>
+                    <Menu anchorEl={anchorEl} keepMounted open={!!anchorEl} onClose={handleClose}>
+                        <MenuItem
+                            onClick={() => {
+                                onManageMembers(team.id);
+                                handleClose();
+                            }}
+                        >
+                            <ListItemIcon>
+                                <GroupAdd fontSize="small" />
+                            </ListItemIcon>
+                            <Typography variant="inherit">Manage members</Typography>
+                        </MenuItem>
+                        <MenuItem onClick={handleRemoveTeam}>
+                            <ListItemIcon>
+                                <Delete fontSize="small" />
+                            </ListItemIcon>
+                            <Typography variant="inherit">Delete Team</Typography>
+                        </MenuItem>
+                    </Menu>
                 </ListItemSecondaryAction>
             </ListItem>
-            {Object.values(members).length > 0 && (
-                <Collapse in={open} timeout="auto" unmountOnExit>
+            {Object.values(team.members).length > 0 && (
+                <Collapse in={isListOpen} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding dense>
-                        {Object.values(members).map((member, memberIndex) => (
+                        {Object.values(team.members).map((member, memberIndex) => (
                             <ListItem key={memberIndex} button>
                                 <ListItemIcon>
                                     <Person />

@@ -1,4 +1,11 @@
-import { Button, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from '@material-ui/core';
+import {
+    Button,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    TextField,
+} from '@material-ui/core';
 import React, { useMemo, useState } from 'react';
 import { auth } from '../../utils/firebase';
 import { ModalView } from './AnonymousDialog';
@@ -7,7 +14,7 @@ import { LoadingIndicator } from './LoadingIndicator';
 export type SignInBodyProps = {
     onSetModalView: (modalView: ModalView) => void;
     onClose: VoidFunction;
-}
+};
 
 export const SignInBody: React.FC<SignInBodyProps> = ({ onSetModalView, onClose }) => {
     let mounted = true;
@@ -19,7 +26,7 @@ export const SignInBody: React.FC<SignInBodyProps> = ({ onSetModalView, onClose 
     const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         event.preventDefault();
         if (!mounted) {
-            return
+            return;
         }
         const { id, value } = event.currentTarget;
         if (id === 'email') {
@@ -29,46 +36,44 @@ export const SignInBody: React.FC<SignInBodyProps> = ({ onSetModalView, onClose 
             setPassword(value);
         }
         if (signInError !== '') {
-            setSignInError('')
+            setSignInError('');
         }
     };
 
-    const handleSignIn = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent<HTMLFormElement>) => {
+    const handleSignIn = async (
+        event: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent<HTMLFormElement>
+    ) => {
         event.preventDefault();
         setShowLoadingIndicator(true);
         if (mounted) {
             auth.signInWithEmailAndPassword(email, password)
                 .then(() => {
                     setShowLoadingIndicator(false);
-                    onClose()
+                    onClose();
                 })
                 .catch((error) => {
                     setPassword('');
                     setShowLoadingIndicator(false);
-                    setSignInError(error.message)
-                })
+                    setSignInError(error.message);
+                });
         }
-    }
+    };
 
     const handleClose = () => {
         mounted = false;
-        onClose()
-    }
+        onClose();
+    };
 
     const isFormCorrect = useMemo(() => {
-        return password !== ''
-            && email !== ''
-    }, [email, password])
+        return password !== '' && email !== '';
+    }, [email, password]);
 
     return (
         <React.Fragment>
             <DialogTitle id="form-dialog-title">Sign In</DialogTitle>
             <DialogContent>
-                {showLoadingIndicator &&
-                    <LoadingIndicator />}
-                <DialogContentText>
-                    Sign in to continue
-            </DialogContentText>
+                {showLoadingIndicator && <LoadingIndicator />}
+                <DialogContentText>Sign in to continue</DialogContentText>
                 <form onSubmit={handleSignIn} className="anonymous-dialog__form">
                     <TextField
                         value={email}
@@ -79,7 +84,7 @@ export const SignInBody: React.FC<SignInBodyProps> = ({ onSetModalView, onClose 
                         fullWidth
                         helperText={signInError !== '' && signInError}
                         error={signInError !== ''}
-                        onChange={(event) => onChangeHandler(event)}
+                        onChange={onChangeHandler}
                     />
                     <TextField
                         value={password}
@@ -88,7 +93,7 @@ export const SignInBody: React.FC<SignInBodyProps> = ({ onSetModalView, onClose 
                         label="Password"
                         type="password"
                         fullWidth
-                        onChange={(event) => onChangeHandler(event)}
+                        onChange={onChangeHandler}
                     />
                     <Button
                         classes={{ root: 'anonymous-dialog__submit' }}
@@ -102,21 +107,20 @@ export const SignInBody: React.FC<SignInBodyProps> = ({ onSetModalView, onClose 
                 </form>
                 <div className="anonymous-dialog__bottom-text">
                     <DialogContentText>
-                        Don't have an account?
-                        {' '}
+                        Don't have an account?{' '}
                         <button
                             className="anonymous-dialog__bottom-button"
                             onClick={() => onSetModalView(ModalView.SignUp)}
                         >
                             Sign Up
-                            </button>
+                        </button>
                         {' / '}
                         <button
                             className="anonymous-dialog__bottom-button"
                             onClick={() => onSetModalView(ModalView.ForgotPassword)}
                         >
                             Password Recovery
-                            </button>
+                        </button>
                     </DialogContentText>
                 </div>
             </DialogContent>
@@ -126,5 +130,5 @@ export const SignInBody: React.FC<SignInBodyProps> = ({ onSetModalView, onClose 
                 </Button>
             </DialogActions>
         </React.Fragment>
-    )
-}
+    );
+};

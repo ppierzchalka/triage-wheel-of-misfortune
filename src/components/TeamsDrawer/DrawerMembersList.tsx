@@ -47,6 +47,16 @@ export const DrawerMembersList: React.FC = () => {
         dispatch(receiveSelection(newSelection));
     };
 
+    const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { id, value } = event.currentTarget;
+        if (id === 'firstName') {
+            setFirstName(value);
+        }
+        if (id === 'lastName') {
+            setLastName(value);
+        }
+    };
+
     const renderDialogContent = (handleClose: VoidFunction) => {
         return (
             <React.Fragment>
@@ -57,15 +67,17 @@ export const DrawerMembersList: React.FC = () => {
                     </DialogContentText>
                     <TextField
                         autoFocus
-                        onChange={(event) => setFirstName(event.target.value)}
+                        onChange={onChangeHandler}
                         margin="dense"
+                        id="firstName"
                         label="First Name"
                         type="text"
                         fullWidth
                     />
                     <TextField
-                        onChange={(event) => setLastName(event.target.value)}
+                        onChange={onChangeHandler}
                         margin="dense"
+                        id="lastName"
                         label="Last Name"
                         type="text"
                         fullWidth

@@ -117,7 +117,7 @@ export const SignUpBody: React.FC<SignUpBodyProps> = ({ onSetModalView, onClose 
                         label="Display name (optional)"
                         type="text"
                         fullWidth
-                        onChange={(event) => onChangeHandler(event)}
+                        onChange={onChangeHandler}
                     />
                     <TextField
                         value={email}
@@ -128,7 +128,7 @@ export const SignUpBody: React.FC<SignUpBodyProps> = ({ onSetModalView, onClose 
                         fullWidth
                         helperText={emailError !== '' && emailError}
                         error={emailError !== ''}
-                        onChange={(event) => onChangeHandler(event)}
+                        onChange={onChangeHandler}
                     />
                     <TextField
                         value={password}
@@ -139,7 +139,7 @@ export const SignUpBody: React.FC<SignUpBodyProps> = ({ onSetModalView, onClose 
                         fullWidth
                         helperText={passwordHelperText}
                         error={!verifiedPassword || passwordError !== ''}
-                        onChange={(event) => onChangeHandler(event)}
+                        onChange={onChangeHandler}
                     />
                     <TextField
                         value={repeatedPassword}
@@ -150,7 +150,7 @@ export const SignUpBody: React.FC<SignUpBodyProps> = ({ onSetModalView, onClose 
                         fullWidth
                         helperText={passwordHelperText}
                         error={!verifiedPassword || passwordError !== ''}
-                        onChange={(event) => onChangeHandler(event)}
+                        onChange={onChangeHandler}
                     />
                     <Button
                         classes={{ root: 'anonymous-dialog__submit' }}
