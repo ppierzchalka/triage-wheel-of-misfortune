@@ -28,17 +28,16 @@ export const DrawerMembersList: React.FC = () => {
         }
     };
 
-    const handleAddUser = (closeDialog: VoidFunction) => {
+    const handleAddUser = (handleClose: VoidFunction) => {
         if (authUser && firstName !== '' && lastName !== '') {
             dispatch(addMemberToDB(authUser, firstName, lastName));
         }
-        handleCloseModal(closeDialog);
+        handleClose();
     };
 
-    const handleCloseModal = (closeDialog: VoidFunction) => {
+    const handleClearData = () => {
         setFirstName('');
         setLastName('');
-        closeDialog();
     };
 
     const handleSelectUser = (id: string, checked: boolean) => {
@@ -48,7 +47,7 @@ export const DrawerMembersList: React.FC = () => {
         dispatch(receiveSelection(newSelection));
     };
 
-    const renderDialogContent = (closeDialog: VoidFunction) => {
+    const renderDialogContent = (handleClose: VoidFunction) => {
         return (
             <React.Fragment>
                 <DialogTitle>Add member</DialogTitle>
@@ -73,11 +72,11 @@ export const DrawerMembersList: React.FC = () => {
                     />
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => handleCloseModal(closeDialog)} color="primary">
+                    <Button onClick={handleClose} color="primary">
                         Cancel
                     </Button>
                     <Button
-                        onClick={() => handleAddUser(closeDialog)}
+                        onClick={() => handleAddUser(handleClose)}
                         color="primary"
                         disabled={firstName === '' || lastName === ''}
                     >
@@ -91,6 +90,7 @@ export const DrawerMembersList: React.FC = () => {
     return (
         <DrawerListWrapper
             addButtonLabel="Add new member"
+            onClearData={handleClearData}
             renderDialogContent={renderDialogContent}
         >
             <ListSubheader component="div">Members</ListSubheader>

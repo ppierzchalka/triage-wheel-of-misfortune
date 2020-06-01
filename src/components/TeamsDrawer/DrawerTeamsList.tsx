@@ -27,16 +27,15 @@ export const DrawerTeamsList: React.FC = () => {
         }
     };
 
-    const handleAddTeam = (closeDialog: VoidFunction) => {
+    const handleAddTeam = (handleClose: VoidFunction) => {
         if (authUser && teamName !== '') {
             dispatch(addTeamToDB(authUser, teamName));
         }
-        handleCloseModal(closeDialog);
+        handleClose();
     };
 
-    const handleCloseModal = (closeDialog: VoidFunction) => {
+    const handleClearData = () => {
         setTeamName('');
-        closeDialog();
     };
 
     const handleSelectTeam = (id: string, checked: boolean) => {
@@ -46,7 +45,7 @@ export const DrawerTeamsList: React.FC = () => {
         dispatch(receiveSelection(newSelection));
     };
 
-    const renderDialogContent = (closeDialog: VoidFunction) => {
+    const renderDialogContent = (handleClose: VoidFunction) => {
         return (
             <React.Fragment>
                 <DialogTitle>Add Team</DialogTitle>
@@ -62,11 +61,11 @@ export const DrawerTeamsList: React.FC = () => {
                     />
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => handleCloseModal(closeDialog)} color="primary">
+                    <Button onClick={handleClose} color="primary">
                         Cancel
                     </Button>
                     <Button
-                        onClick={() => handleAddTeam(closeDialog)}
+                        onClick={() => handleAddTeam(handleClose)}
                         color="primary"
                         disabled={teamName === ''}
                     >
@@ -78,7 +77,11 @@ export const DrawerTeamsList: React.FC = () => {
     };
 
     return (
-        <DrawerListWrapper addButtonLabel="Add new team" renderDialogContent={renderDialogContent}>
+        <DrawerListWrapper
+            addButtonLabel="Add new team"
+            onClearData={handleClearData}
+            renderDialogContent={renderDialogContent}
+        >
             <ListSubheader component="div">Teams</ListSubheader>
             <List classes={{ root: 'drawer-list__content' }} component="div">
                 {Object.values(teams).map((team, teamIndex) => (
