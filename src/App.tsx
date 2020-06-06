@@ -6,6 +6,7 @@ import { AnonymousDialog } from './components/AnonymousDialog/AnonymousDialog';
 import { BodyWrapper } from './components/BodyWrapper/BodyWrapper';
 import { Header } from './components/Header/Header';
 import { TeamsDrawer } from './components/TeamsDrawer/TeamsDrawer';
+import { WheelOfMisfortuneWrapper } from './components/WheelOfMisfortune/WheelOfMisfortuneWrapper';
 import { RootStateType } from './reducers';
 import { auth } from './utils/firebase';
 
@@ -51,14 +52,6 @@ class AppWrapper extends React.Component<AppWrapperProps, AppWrapperState> {
         }
     };
 
-    private renderApp = () => (
-        <div>
-            <p>App</p>
-        </div>
-    );
-
-    private renderLogIn = () => <p>Log In</p>;
-
     render() {
         const { authUser } = this.props;
         const { isDrawerVisible, isModalVisible } = this.state;
@@ -80,7 +73,7 @@ class AppWrapper extends React.Component<AppWrapperProps, AppWrapperState> {
                         onClose={() => this.handleShowLoginModal(false)}
                     />
                 )}
-                <BodyWrapper>{authUser ? this.renderApp() : this.renderLogIn()}</BodyWrapper>
+                <BodyWrapper>{authUser ? <WheelOfMisfortuneWrapper /> : <p>Log In</p>}</BodyWrapper>
             </React.Fragment>
         );
     }
