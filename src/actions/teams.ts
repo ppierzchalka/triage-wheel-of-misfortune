@@ -1,12 +1,7 @@
 import { Dispatch } from 'react';
 import { ThunkAction } from 'redux-thunk';
 import { RootStateActions } from '../reducers';
-import {
-    firebaseAddEntry,
-    firebaseModifyMembers,
-    firebaseRemoveTeam,
-    ModifyOperation,
-} from '../utils/firebase';
+import { firebaseAddEntry, firebaseModifyMembers, firebaseRemoveTeam } from '../utils/firebase';
 import { generateUniqueId } from '../utils/helpers';
 import { AuthUser } from './authUser';
 
@@ -22,8 +17,7 @@ export enum TeamActionType {
     ReceiveTeams = 'ReceiveTeams',
     AddTeam = 'AddTeam',
     RemoveTeam = 'RemoveTeam',
-    AddTeamMember = 'AddTeamMember',
-    RemoveTeamMember = 'RemoveTeamMember',
+    ManageTeamMembers = 'ReceiveTeamMembers',
 }
 
 export type ReceiveTeamAction = {
@@ -41,19 +35,11 @@ export type RemoveTeamAction = {
     payload: string;
 };
 
-export type AddTeamMemberAction = {
-    type: TeamActionType.AddTeamMember;
+export type ManageTeamMembersAction = {
+    type: TeamActionType.ManageTeamMembers;
     payload: {
         teamId: string;
-        memberId: string;
-    };
-};
-
-export type RemoveTeamMemberAction = {
-    type: TeamActionType.RemoveTeamMember;
-    payload: {
-        teamId: string;
-        memberId: string;
+        members: string[];
     };
 };
 
@@ -61,8 +47,7 @@ export type TeamActions =
     | ReceiveTeamAction
     | AddTeamAction
     | RemoveTeamAction
-    | AddTeamMemberAction
-    | RemoveTeamMemberAction;
+    | ManageTeamMembersAction;
 
 export const receiveTeams = (teams: Teams): ReceiveTeamAction => ({
     type: TeamActionType.ReceiveTeams,
@@ -111,46 +96,24 @@ export const removeTeamFromDB = (
         });
 };
 
-export const addTeamMember = (teamId: string, memberId: string): AddTeamMemberAction => ({
-    type: TeamActionType.AddTeamMember,
+export const manageTeamMembers = (teamId: string, members: string[]): ManageTeamMembersAction => ({
+    type: TeamActionType.ManageTeamMembers,
     payload: {
         teamId,
-        memberId,
+        members,
     },
 });
 
-export const addTeamMemberToDB = (
+export const manageTeamMembersInDB = (
     authedUser: AuthUser,
     teamId: string,
-    memberId: string
+    members: string[]
 ): ThunkAction<Promise<void>, {}, {}, TeamActions> => (dispatch: Dispatch<RootStateActions>) => {
-    return firebaseModifyMembers(authedUser, teamId, memberId, ModifyOperation.Add)
+    return firebaseModifyMembers(authedUser, teamId, members)
         .then(() => {
-            dispatch(addTeamMember(teamId, memberId));
+            dispatch(manageTeamMembers(teamId, members));
         })
         .catch((error) => {
-            console.error('Error adding team member', error);
-        });
-};
-
-export const removeTeamMember = (teamId: string, memberId: string): RemoveTeamMemberAction => ({
-    type: TeamActionType.RemoveTeamMember,
-    payload: {
-        teamId,
-        memberId,
-    },
-});
-
-export const RemoveTeamMemberFromDB = (
-    authedUser: AuthUser,
-    teamId: string,
-    memberId: string
-): ThunkAction<Promise<void>, {}, {}, TeamActions> => (dispatch: Dispatch<RootStateActions>) => {
-    return firebaseModifyMembers(authedUser, teamId, memberId, ModifyOperation.Remove)
-        .then(() => {
-            dispatch(removeTeamMember(teamId, memberId));
-        })
-        .catch((error) => {
-            console.error('Error removing team member', error);
+            console.error('Error managing members', error);
         });
 };

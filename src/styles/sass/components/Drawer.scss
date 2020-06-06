@@ -58,6 +58,9 @@
             .drawer-list__content {
                 height: calc(100% - 66px);
                 overflow: auto;
+                .team-list__chevron-button {
+                    margin-right: 15px;
+                }
             }
             .drawer-tab__footer {
                 padding-bottom: 15 0px;
@@ -70,5 +73,13 @@
                 }
             }
         }
+    }
+}
+.member-list__label {
+    span {
+        max-width: 188px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 }

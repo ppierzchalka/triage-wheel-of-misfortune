@@ -57,44 +57,47 @@ export const DrawerMembersList: React.FC = () => {
         }
     };
 
-    const renderDialogContent = (handleClose: VoidFunction) => {
+    const renderAddDialogContent = (handleClose: VoidFunction) => {
         return (
             <React.Fragment>
                 <DialogTitle>Add member</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        To add member, please enter new member data:
-                    </DialogContentText>
-                    <TextField
-                        autoFocus
-                        onChange={onChangeHandler}
-                        margin="dense"
-                        id="firstName"
-                        label="First Name"
-                        type="text"
-                        fullWidth
-                    />
-                    <TextField
-                        onChange={onChangeHandler}
-                        margin="dense"
-                        id="lastName"
-                        label="Last Name"
-                        type="text"
-                        fullWidth
-                    />
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose} color="primary">
-                        Cancel
-                    </Button>
-                    <Button
-                        onClick={() => handleAddUser(handleClose)}
-                        color="primary"
-                        disabled={firstName === '' || lastName === ''}
-                    >
-                        Add new member
-                    </Button>
-                </DialogActions>
+                <form onSubmit={() => handleAddUser(handleClose)}>
+                    <DialogContent>
+                        <DialogContentText>
+                            To add member, please enter new member data:
+                        </DialogContentText>
+                        <TextField
+                            autoFocus
+                            onChange={onChangeHandler}
+                            margin="dense"
+                            id="firstName"
+                            label="First Name"
+                            type="text"
+                            fullWidth
+                        />
+                        <TextField
+                            onChange={onChangeHandler}
+                            margin="dense"
+                            id="lastName"
+                            label="Last Name"
+                            type="text"
+                            fullWidth
+                        />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleClose} color="primary">
+                            Cancel
+                        </Button>
+                        <Button
+                            type="submit"
+                            onClick={() => handleAddUser(handleClose)}
+                            color="primary"
+                            disabled={firstName === '' || lastName === ''}
+                        >
+                            Add new member
+                        </Button>
+                    </DialogActions>
+                </form>
             </React.Fragment>
         );
     };
@@ -103,7 +106,7 @@ export const DrawerMembersList: React.FC = () => {
         <DrawerListWrapper
             addButtonLabel="Add new member"
             onClearData={handleClearData}
-            renderDialogContent={renderDialogContent}
+            onRenderAddDialogContent={renderAddDialogContent}
         >
             <ListSubheader component="div">Members</ListSubheader>
             <List classes={{ root: 'drawer-list__content' }} component="div">

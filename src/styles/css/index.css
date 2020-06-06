@@ -145,6 +145,13 @@ code {
     height: calc(100% - 66px);
     overflow: auto;
 }
+.drawer
+    .drawer__tab-content
+    .drawer-list__container
+    .drawer-list__content
+    .team-list__chevron-button {
+    margin-right: 15px;
+}
 .drawer .drawer__tab-content .drawer-list__container .drawer-tab__footer {
     padding-bottom: 15 0px;
     min-height: 66px;
@@ -158,6 +165,13 @@ code {
     .drawer-tab__footer
     .drawer-tab__footer-button {
     flex-grow: 1;
+}
+
+.member-list__label span {
+    max-width: 188px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .anonymous-dialog__wrapper .anonymous-dialog__form {
@@ -198,9 +212,11 @@ code {
     align-items: center;
 }
 
-.member-list__label span {
-    max-width: 188px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+.members-management__body {
+    background: #f5f5f5;
+    border-radius: 4px;
+}
+.members-management__body .members-management__list {
+    height: 20rem;
+    overflow: auto;
 }

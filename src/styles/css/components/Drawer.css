@@ -65,6 +65,13 @@
     height: calc(100% - 66px);
     overflow: auto;
 }
+.drawer
+    .drawer__tab-content
+    .drawer-list__container
+    .drawer-list__content
+    .team-list__chevron-button {
+    margin-right: 15px;
+}
 .drawer .drawer__tab-content .drawer-list__container .drawer-tab__footer {
     padding-bottom: 15 0px;
     min-height: 66px;
@@ -78,4 +85,11 @@
     .drawer-tab__footer
     .drawer-tab__footer-button {
     flex-grow: 1;
+}
+
+.member-list__label span {
+    max-width: 188px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

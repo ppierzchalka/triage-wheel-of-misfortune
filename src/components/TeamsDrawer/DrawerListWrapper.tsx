@@ -4,13 +4,13 @@ import React, { useState } from 'react';
 
 export type DrawerListWrapperProps = {
     addButtonLabel: string;
-    renderDialogContent: (closeDialog: VoidFunction) => React.ReactNode;
+    onRenderAddDialogContent: (closeDialog: VoidFunction) => React.ReactNode;
     onClearData?: VoidFunction;
 };
 
 export const DrawerListWrapper: React.FC<DrawerListWrapperProps> = ({
     addButtonLabel,
-    renderDialogContent,
+    onRenderAddDialogContent,
     children,
     onClearData,
 }) => {
@@ -42,7 +42,7 @@ export const DrawerListWrapper: React.FC<DrawerListWrapperProps> = ({
                     onClose={handleClose}
                     classes={{ paper: 'drawer-tab__dialog' }}
                 >
-                    {renderDialogContent(handleClose)}
+                    {onRenderAddDialogContent(handleClose)}
                 </Dialog>
             </Container>
         </Container>

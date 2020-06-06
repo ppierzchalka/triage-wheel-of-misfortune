@@ -1,5 +1,6 @@
 import {
     Button,
+    Dialog,
     DialogActions,
     DialogContent,
     DialogContentText,
@@ -15,9 +16,11 @@ import { addTeamToDB } from '../../actions/teams';
 import { RootStateType } from '../../reducers';
 import { DrawerListWrapper } from './DrawerListWrapper';
 import { DrawerTeamsListItem } from './DrawerTeamsListItem';
+import { MembersTransferList } from './MembersTransferList';
 
 export const DrawerTeamsList: React.FC = () => {
     const [teamName, setTeamName] = useState<string>('');
+    const [activeTeam, setActiveTeam] = useState<string | null>(null);
     const { teams, authUser, selection } = useSelector((state: RootStateType) => state);
     const dispatch = useDispatch();
 
@@ -39,35 +42,38 @@ export const DrawerTeamsList: React.FC = () => {
         dispatch(receiveSelection(newSelection));
     };
 
-    const handleManageMembers = (teamId: string) => console.log(teamId);
-
-    const renderDialogContent = (handleClose: VoidFunction) => {
+    const renderAddDialogContent = (handleClose: VoidFunction) => {
         return (
             <React.Fragment>
                 <DialogTitle>Add Team</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>To add team, please enter new team name:</DialogContentText>
-                    <TextField
-                        autoFocus
-                        onChange={(event) => setTeamName(event.target.value)}
-                        margin="dense"
-                        label="Team Name"
-                        type="text"
-                        fullWidth
-                    />
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose} color="primary">
-                        Cancel
-                    </Button>
-                    <Button
-                        onClick={() => handleAddTeam(handleClose)}
-                        color="primary"
-                        disabled={teamName === ''}
-                    >
-                        Add new team
-                    </Button>
-                </DialogActions>
+                <form onSubmit={() => handleAddTeam(handleClose)}>
+                    <DialogContent>
+                        <DialogContentText>
+                            To add team, please enter new team name:
+                        </DialogContentText>
+                        <TextField
+                            autoFocus
+                            onChange={(event) => setTeamName(event.target.value)}
+                            margin="dense"
+                            label="Team Name"
+                            type="text"
+                            fullWidth
+                        />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleClose} color="primary">
+                            Cancel
+                        </Button>
+                        <Button
+                            onClick={() => handleAddTeam(handleClose)}
+                            type="submit"
+                            color="primary"
+                            disabled={teamName === ''}
+                        >
+                            Add new team
+                        </Button>
+                    </DialogActions>
+                </form>
             </React.Fragment>
         );
     };
@@ -76,13 +82,13 @@ export const DrawerTeamsList: React.FC = () => {
         <DrawerListWrapper
             addButtonLabel="Add new team"
             onClearData={handleClearData}
-            renderDialogContent={renderDialogContent}
+            onRenderAddDialogContent={renderAddDialogContent}
         >
             <ListSubheader component="div">Teams</ListSubheader>
             <List classes={{ root: 'drawer-list__content' }} component="div">
                 {Object.values(teams).map((team, teamIndex) => (
                     <DrawerTeamsListItem
-                        onManageMembers={handleManageMembers}
+                        onManageMembers={setActiveTeam}
                         key={teamIndex}
                         team={team}
                         selected={selection.selection.includes(team.id)}
@@ -90,6 +96,19 @@ export const DrawerTeamsList: React.FC = () => {
                     />
                 ))}
             </List>
+
+            <Dialog
+                open={!!activeTeam}
+                onClose={() => setActiveTeam(null)}
+                classes={{ paper: 'drawer-tab__dialog' }}
+            >
+                {activeTeam && (
+                    <MembersTransferList
+                        activeTeam={activeTeam}
+                        onClose={() => setActiveTeam(null)}
+                    />
+                )}
+            </Dialog>
         </DrawerListWrapper>
     );
 };

@@ -4,3 +4,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+.team-list__chevron-button {
+    margin-right: 15px;
+}

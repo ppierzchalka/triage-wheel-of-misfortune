@@ -28,24 +28,13 @@ export const teams = (
                 ...rest,
             };
         }
-        case TeamActionType.AddTeamMember: {
-            const { teamId, memberId } = action.payload;
+        case TeamActionType.ManageTeamMembers: {
+            const { teamId, members } = action.payload;
             return {
                 ...state,
                 [teamId]: {
                     ...state[teamId],
-                    members: [...state[teamId].members, memberId],
-                },
-            };
-        }
-        case TeamActionType.RemoveTeamMember: {
-            const { teamId, memberId } = action.payload;
-            const newMembers = state[teamId].members.filter((member) => member !== memberId);
-            return {
-                ...state,
-                [teamId]: {
-                    ...state[teamId],
-                    members: newMembers,
+                    members,
                 },
             };
         }

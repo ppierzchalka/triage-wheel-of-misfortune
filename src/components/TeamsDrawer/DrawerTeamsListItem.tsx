@@ -11,7 +11,15 @@ import {
     MenuItem,
     Typography,
 } from '@material-ui/core';
-import { Delete, ExpandLess, ExpandMore, GroupAdd, MoreVert, Person } from '@material-ui/icons';
+import {
+    Delete,
+    ExpandLess,
+    ExpandMore,
+    GroupAdd,
+    MoreVert,
+    Person,
+    Warning,
+} from '@material-ui/icons';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { removeTeamFromDB, Team } from '../../actions/teams';
@@ -31,8 +39,9 @@ export const DrawerTeamsListItem: React.FC<DrawerTeamsListItemProps> = ({
     onPrimaryAction,
 }) => {
     const [isListOpen, setIsListOpen] = useState<boolean>(false);
+    const [isRemovalClicked, setIsRemovalClicked] = useState<boolean>(false);
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-    const { authUser } = useSelector((state: RootStateType) => state);
+    const { authUser, members } = useSelector((state: RootStateType) => state);
     const dispatch = useDispatch();
 
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -40,13 +49,14 @@ export const DrawerTeamsListItem: React.FC<DrawerTeamsListItemProps> = ({
     };
 
     const handleClose = () => {
+        setIsRemovalClicked(false);
         setAnchorEl(null);
     };
 
     const handleRemoveTeam = () => {
         if (authUser) {
-            dispatch(removeTeamFromDB(authUser, team.id));
             handleClose();
+            dispatch(removeTeamFromDB(authUser, team.id));
         }
     };
 
@@ -73,7 +83,11 @@ export const DrawerTeamsListItem: React.FC<DrawerTeamsListItemProps> = ({
                     secondary={Object.values(team.members).length === 0 && 'No members'}
                 />
                 {Object.values(team.members).length > 0 && (
-                    <IconButton edge="end" onClick={handleToggleOpen}>
+                    <IconButton
+                        edge="end"
+                        onClick={handleToggleOpen}
+                        classes={{ root: 'team-list__chevron-button' }}
+                    >
                         {isListOpen ? <ExpandLess color="action" /> : <ExpandMore color="action" />}
                     </IconButton>
                 )}
@@ -93,11 +107,23 @@ export const DrawerTeamsListItem: React.FC<DrawerTeamsListItemProps> = ({
                             </ListItemIcon>
                             <Typography variant="inherit">Manage members</Typography>
                         </MenuItem>
-                        <MenuItem onClick={handleRemoveTeam}>
+                        <MenuItem
+                            onClick={
+                                isRemovalClicked
+                                    ? handleRemoveTeam
+                                    : () => setIsRemovalClicked(true)
+                            }
+                        >
                             <ListItemIcon>
-                                <Delete fontSize="small" />
+                                {isRemovalClicked ? (
+                                    <Warning fontSize="small" />
+                                ) : (
+                                    <Delete fontSize="small" />
+                                )}
                             </ListItemIcon>
-                            <Typography variant="inherit">Delete Team</Typography>
+                            <Typography variant="inherit">
+                                {isRemovalClicked ? 'Are you sure?' : 'Delete Team'}
+                            </Typography>
                         </MenuItem>
                     </Menu>
                 </ListItemSecondaryAction>
@@ -105,14 +131,17 @@ export const DrawerTeamsListItem: React.FC<DrawerTeamsListItemProps> = ({
             {Object.values(team.members).length > 0 && (
                 <Collapse in={isListOpen} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding dense>
-                        {Object.values(team.members).map((member, memberIndex) => (
-                            <ListItem key={memberIndex} button>
-                                <ListItemIcon>
-                                    <Person />
-                                </ListItemIcon>
-                                <ListItemText primary={member} />
-                            </ListItem>
-                        ))}
+                        {Object.values(team.members).map((memberId) => {
+                            const memberLabel = `${members[memberId].firstName} ${members[memberId].lastName}`;
+                            return (
+                                <ListItem key={memberId} button>
+                                    <ListItemIcon>
+                                        <Person />
+                                    </ListItemIcon>
+                                    <ListItemText primary={memberLabel} />
+                                </ListItem>
+                            );
+                        })}
                     </List>
                 </Collapse>
             )}

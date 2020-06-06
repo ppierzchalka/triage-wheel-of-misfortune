@@ -18,11 +18,6 @@ export type FirebaseConfig = {
     measurementId: string;
 };
 
-export enum ModifyOperation {
-    Add = 'Add',
-    Remove = 'Remove',
-}
-
 firebase.initializeApp(firebaseConfig);
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();
@@ -91,26 +86,17 @@ export function firebaseAddEntry(
         });
 }
 
-export async function firebaseModifyMembers(
-    user: AuthUser,
-    teamId: string,
-    memberId: string,
-    operation: ModifyOperation
-) {
+export async function firebaseModifyMembers(user: AuthUser, teamId: string, members: string[]) {
     const entryRef = firestore.collection(`users/${user.uid}/teams`).doc(teamId);
     const document = await entryRef.get();
     const entryData = document.data();
     if (!entryData) {
         return;
     }
-    const entryMembers = entryData.members;
     return entryRef
         .set(
             {
-                members:
-                    operation === ModifyOperation.Add
-                        ? [...entryMembers, memberId]
-                        : entryMembers.filter((member: string) => member !== memberId),
+                members,
             },
             { merge: true }
         )
