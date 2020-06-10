@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import { signOut, UserData } from './actions/authUser';
 import { handleInitialData } from './actions/shared';
 import { AnonymousDialog } from './components/AnonymousDialog/AnonymousDialog';
-import { BodyWrapper } from './components/BodyWrapper/BodyWrapper';
 import { Header } from './components/Header/Header';
+import { HomePage } from './components/HomePage/HomePage';
 import { TeamsDrawer } from './components/TeamsDrawer/TeamsDrawer';
 import { WheelOfMisfortuneWrapper } from './components/WheelOfMisfortune/WheelOfMisfortuneWrapper';
 import { RootStateType } from './reducers';
@@ -73,7 +73,11 @@ class AppWrapper extends React.Component<AppWrapperProps, AppWrapperState> {
                         onClose={() => this.handleShowLoginModal(false)}
                     />
                 )}
-                <BodyWrapper>{authUser ? <WheelOfMisfortuneWrapper /> : <p>Log In</p>}</BodyWrapper>
+                {authUser ? (
+                    <WheelOfMisfortuneWrapper />
+                ) : (
+                    <HomePage onShowLoginModal={() => this.handleShowLoginModal(true)} />
+                )}
             </React.Fragment>
         );
     }

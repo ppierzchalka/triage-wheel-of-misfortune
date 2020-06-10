@@ -134,7 +134,7 @@ export const DrawerTeamsListItem: React.FC<DrawerTeamsListItemProps> = ({
                         {Object.values(team.members).map((memberId) => {
                             const memberLabel = `${members[memberId].firstName} ${members[memberId].lastName}`;
                             return (
-                                <ListItem key={memberId} button>
+                                <ListItem key={memberId} button disableRipple>
                                     <ListItemIcon>
                                         <Person />
                                     </ListItemIcon>

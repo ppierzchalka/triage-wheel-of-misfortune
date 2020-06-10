@@ -12170,6 +12170,11 @@ wide-align@^1.1.0:
   dependencies:
     string-width "^1.0.2 || 2"
 
+wof@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/wof/-/wof-1.0.3.tgz#eea74937d50165585ce65a6c7b458aec937b6669"
+  integrity sha512-rEaLFkLH1sRt6h6uQy7VYPC3GmhUqsaR0mx+q+ybHioEZijsjrdeB1QduRiv8rk3M1D6nwfTXnXSEZXrNO89qQ==
+
 word-wrap@~1.2.3:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/word-wrap/-/word-wrap-1.2.3.tgz#610636f6b1f703891bd34771ccb17fb93b47079c"
