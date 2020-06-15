@@ -5619,6 +5619,11 @@ growly@^1.3.0:
   resolved "https://registry.yarnpkg.com/growly/-/growly-1.3.0.tgz#f10748cbe76af964b7c96c93c6bcc28af120c081"
   integrity sha1-8QdIy+dq+WS3yWyTxrzCivEgwIE=
 
+gsap@^3.3.3:
+  version "3.3.3"
+  resolved "https://registry.yarnpkg.com/gsap/-/gsap-3.3.3.tgz#20121971bf47858cb600798ba9fbf83e3acdc745"
+  integrity sha512-89D0Av+UIajcfzEUeZFl1h87dJc0xVIvbJ05+wVbH3ernHzZiupb7CxWXpxxo652jZfmsjwM3jyc8bh089dKUg==
+
 gzip-size@5.1.1:
   version "5.1.1"
   resolved "https://registry.yarnpkg.com/gzip-size/-/gzip-size-5.1.1.tgz#cb9bee692f87c0612b232840a873904e4c135274"
@@ -12170,10 +12175,10 @@ wide-align@^1.1.0:
   dependencies:
     string-width "^1.0.2 || 2"
 
-wof@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/wof/-/wof-1.0.3.tgz#eea74937d50165585ce65a6c7b458aec937b6669"
-  integrity sha512-rEaLFkLH1sRt6h6uQy7VYPC3GmhUqsaR0mx+q+ybHioEZijsjrdeB1QduRiv8rk3M1D6nwfTXnXSEZXrNO89qQ==
+winwheel@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/winwheel/-/winwheel-1.0.1.tgz#6580cdee936469749caf19cd4071bd548eb466ac"
+  integrity sha1-ZYDN7pNkaXScrxnNQHG9VI60Zqw=
 
 word-wrap@~1.2.3:
   version "1.2.3"

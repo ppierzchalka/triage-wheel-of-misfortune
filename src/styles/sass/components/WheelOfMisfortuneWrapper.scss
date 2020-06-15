@@ -1,0 +1,17 @@
+.winwheel__container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    .winwheel-canvas__wrapper {
+        margin-top: 15px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        img.winwheel__pointer {
+            margin-bottom: -20px;
+            z-index: 1;
+        }
+    }
+}

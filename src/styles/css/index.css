@@ -1,13 +1,18 @@
-body {
+html body {
+    min-height: 100vh;
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
         'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
-
-code {
-    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+html body #root {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
 }
 
 .homepage__wrapper {
@@ -214,4 +219,22 @@ code {
 .members-management__body .members-management__list {
     height: 20rem;
     overflow: auto;
+}
+
+.winwheel__container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.winwheel__container .winwheel-canvas__wrapper {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.winwheel__container .winwheel-canvas__wrapper img.winwheel__pointer {
+    margin-bottom: -20px;
+    z-index: 1;
 }
