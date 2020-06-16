@@ -73,8 +73,18 @@ const getRandomColor = () => {
     return colors[randomColorNumber];
 };
 
+const shuffleArray = (array: any[]) => {
+    return array.reduce((acc, _curr, i) => {
+        const j = Math.floor(Math.random() * i);
+        const temp = acc[i];
+        acc[i] = acc[j];
+        acc[j] = temp;
+        return array;
+    }, array);
+};
+
 export const prepareParticipantsData = (participants: string[]): Participants =>
-    participants.map((participant) => ({
+    shuffleArray(participants).map((participant) => ({
         text: participant,
         fillStyle: getRandomColor(),
     }));
