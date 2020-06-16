@@ -5,8 +5,8 @@ import { handleInitialData } from './actions/shared';
 import { AnonymousDialog } from './components/AnonymousDialog/AnonymousDialog';
 import { Header } from './components/Header/Header';
 import { HomePage } from './components/HomePage/HomePage';
+import { MainApp } from './components/MainApp/MainApp';
 import { TeamsDrawer } from './components/TeamsDrawer/TeamsDrawer';
-import { WheelOfMisfortuneWrapper } from './components/WheelOfMisfortune/WheelOfMisfortuneWrapper';
 import { RootStateType } from './reducers';
 import { auth } from './utils/firebase';
 
@@ -74,7 +74,7 @@ class AppWrapper extends React.Component<AppWrapperProps, AppWrapperState> {
                     />
                 )}
                 {authUser ? (
-                    <WheelOfMisfortuneWrapper />
+                    <MainApp />
                 ) : (
                     <HomePage onShowLoginModal={() => this.handleShowLoginModal(true)} />
                 )}

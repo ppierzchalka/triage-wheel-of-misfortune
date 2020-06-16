@@ -1,0 +1,33 @@
+.wof__container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100%;
+    flex-basis: 50%;
+    flex-grow: 0;
+}
+.wof__container .wof-canvas__wrapper {
+    margin: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.wof__container .wof-canvas__wrapper .wof__pointer {
+    margin-bottom: -20px;
+    z-index: 1;
+    width: 50px;
+    transform: rotate(180deg);
+}
+.wof__container .wof-settings__wrapper {
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.wof__container .wof-settings__wrapper .wof-settings__button {
+    margin: 5px;
+    width: 100%;
+}
