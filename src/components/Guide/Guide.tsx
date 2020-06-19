@@ -4,13 +4,13 @@ import React from 'react';
 export const Guide = () => {
     return (
         <div className={'guide__container'}>
-            <Typography variant="h4" gutterBottom>
+            <Typography variant="h2" gutterBottom>
                 How to use it?
             </Typography>
             <Typography variant="h6" gutterBottom>
                 Members and Teams management
             </Typography>
-            <Typography variant="body1" gutterBottom>
+            <Typography paragraph variant="body1" gutterBottom>
                 There are two views in drawer, team view, and members view. <br />
                 In Teams view you can select whole team, check team participants or add existing
                 members to the team. <br />
@@ -19,14 +19,14 @@ export const Guide = () => {
             <Typography variant="h6" gutterBottom>
                 Selecting participants
             </Typography>
-            <Typography variant="body1" gutterBottom>
+            <Typography paragraph variant="body1" gutterBottom>
                 Use drawer menu on the left to select participants for bug lottery. <br />
                 You can select individual members or whole teams.
             </Typography>
             <Typography variant="h6" gutterBottom>
                 Using the wheel
             </Typography>
-            <Typography variant="body1" gutterBottom>
+            <Typography paragraph variant="body1" gutterBottom>
                 When participants are selected, use sliders below the wheel to adjust spinning
                 parameters and use spin the wheel button to find out the lucky winner. If you are
                 not satisfied with the result, you can reset the wheel, and start again.

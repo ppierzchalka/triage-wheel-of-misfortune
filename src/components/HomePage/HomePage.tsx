@@ -20,17 +20,26 @@ export const HomePage: React.FC<HomePageProps> = ({ onShowLoginModal }) => {
                     classes={{ root: 'homepage__grid-container homepage__text' }}
                 >
                     <Container>
-                        <Typography variant="subtitle1" classes={{ root: 'homepage__subtitle' }}>
+                        <Typography
+                            gutterBottom
+                            variant="subtitle1"
+                            classes={{ root: 'homepage__subtitle' }}
+                        >
                             Welcome to:
                         </Typography>
                         <Typography
                             classes={{ root: 'homepage__title' }}
                             variant="h1"
                             component="h2"
+                            gutterBottom
                         >
                             Triage wheel of misfortune
                         </Typography>
-                        <Typography classes={{ root: 'homepage__body' }} variant="body1">
+                        <Typography
+                            gutterBottom
+                            classes={{ root: 'homepage__body' }}
+                            variant="body1"
+                        >
                             Having trouble with finding a volunteer to fix a bug in your project?
                             <br />
                             Fear no more, find the (not so) lucky winner of your special prize with
