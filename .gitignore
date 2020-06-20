@@ -13,6 +13,8 @@
 
 # credential file
 src/utils/credentials.ts
+
+# compiled css files
 src/styles/css
 
 # misc
