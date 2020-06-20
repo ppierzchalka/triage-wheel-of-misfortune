@@ -13,6 +13,7 @@
 
 # credential file
 src/utils/credentials.ts
+src/styles/css
 
 # misc
 .DS_Store
