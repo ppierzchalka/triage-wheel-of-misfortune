@@ -1,8 +1,14 @@
 #root {
-    .main-app__container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-grow: 1;
+    .main-app__wrapper {
+        width: 100%;
+        max-height: calc(100vh - 64px);
+        overflow: auto;
+        .main-app__container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            flex-grow: 1;
+            margin-top: 2%;
+        }
     }
 }

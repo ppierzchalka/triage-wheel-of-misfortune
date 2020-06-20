@@ -5,10 +5,9 @@ export const WheelIcon: React.FC<React.HTMLAttributes<HTMLDivElement>> = (props)
         <div className={'homepage__icon'} {...props}>
             <svg
                 xmlns="http://www.w3.org/2000/svg"
-                height="512px"
-                viewBox="-56 0 512 512"
-                width="512px"
-                className=""
+                height="400px"
+                viewBox="0 50 400 400"
+                width="475px"
             >
                 <g>
                     <path

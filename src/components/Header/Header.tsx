@@ -14,7 +14,7 @@ export type HeaderProps = {
 export const Header: React.FC<HeaderProps> = ({ onToggleDrawer, onShowLoginModal, onLogOut }) => {
     const authUser = useSelector((state: RootStateType) => state.authUser);
     return (
-        <AppBar position="static" classes={{ root: 'app-bar' }}>
+        <AppBar position="sticky" classes={{ root: 'app-bar' }}>
             <Toolbar classes={{ root: 'app-bar__toolbar' }}>
                 <IconButton edge="start" color="inherit" onClick={onToggleDrawer}>
                     <Menu />

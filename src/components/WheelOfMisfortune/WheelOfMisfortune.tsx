@@ -55,7 +55,7 @@ export const WheelOfMisfortune: React.FC<WheelOfMisfortuneProps> = ({ participan
         if (canvasRef?.current) {
             winWheelRef.current = new Winwheel({
                 canvasId: canvasRef.current.id,
-                outerRadius: 200,
+                outerRadius: 185,
                 textFontSize: 13,
                 textAlignment: 'center',
                 numSegments: participants.length,
@@ -90,7 +90,7 @@ export const WheelOfMisfortune: React.FC<WheelOfMisfortuneProps> = ({ participan
                             color1={'#ff7961'}
                             color2={'#f44336'}
                         />
-                        <canvas ref={canvasRef} id={'wof-canvas'} width="402" height="402" />
+                        <canvas ref={canvasRef} id={'wof-canvas'} width="380" height="380" />
                     </div>
                     <div className={'wof-settings__wrapper'}>
                         <Typography gutterBottom>Duration</Typography>

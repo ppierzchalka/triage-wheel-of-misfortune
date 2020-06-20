@@ -7,12 +7,46 @@ html {
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         #root {
-            width: 100%;
             display: flex;
             justify-content: flex-start;
             align-items: center;
             flex-direction: column;
             height: 100vh;
         }
+    }
+}
+* {
+    ::-webkit-scrollbar {
+        width: 5px;
+        height: 5px;
+    }
+    ::-webkit-scrollbar-button {
+        width: 0px;
+        height: 0px;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: $primary-blue;
+        border: 0px none #ffffff;
+        border-radius: 50px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background: $primary-blue-dark;
+    }
+    ::-webkit-scrollbar-thumb:active {
+        background: $primary-blue-light;
+    }
+    ::-webkit-scrollbar-track {
+        background: #ebebeb;
+        border: 0px none #ffffff;
+        border-radius: 50px;
+    }
+    ::-webkit-scrollbar-track:hover {
+        background: #ebebeb;
+    }
+    ::-webkit-scrollbar-track:active {
+        background: #ebebeb;
+    }
+    ::-webkit-scrollbar-corner {
+        background: transparent;
     }
 }

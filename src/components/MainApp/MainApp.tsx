@@ -16,9 +16,11 @@ export const MainApp: React.FC = () => {
     const participantsData = useMemo(() => prepareParticipantsData(participants), [participants]);
 
     return (
-        <Container classes={{ root: 'main-app__container' }}>
-            <Guide />
-            <WheelOfMisfortune participants={participantsData} />
-        </Container>
+        <div className={'main-app__wrapper'}>
+            <Container classes={{ root: 'main-app__container' }}>
+                <Guide />
+                <WheelOfMisfortune participants={participantsData} />
+            </Container>
+        </div>
     );
 };

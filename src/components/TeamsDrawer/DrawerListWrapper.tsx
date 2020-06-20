@@ -24,7 +24,7 @@ export const DrawerListWrapper: React.FC<DrawerListWrapperProps> = ({
     };
 
     return (
-        <Container classes={{ root: 'drawer-list__container' }}>
+        <div className={'drawer-list__container'}>
             {children}
             <Container classes={{ root: 'drawer-tab__footer' }}>
                 <Button
@@ -45,6 +45,6 @@ export const DrawerListWrapper: React.FC<DrawerListWrapperProps> = ({
                     {onRenderAddDialogContent(handleClose)}
                 </Dialog>
             </Container>
-        </Container>
+        </div>
     );
 };
