@@ -25,15 +25,15 @@ html {
         height: 0px;
     }
     ::-webkit-scrollbar-thumb {
-        background: $primary-blue;
+        background: #3f51b5;
         border: 0px none #ffffff;
         border-radius: 50px;
     }
     ::-webkit-scrollbar-thumb:hover {
-        background: $primary-blue-dark;
+        background: #32408f;
     }
     ::-webkit-scrollbar-thumb:active {
-        background: $primary-blue-light;
+        background: #6070c7;
     }
     ::-webkit-scrollbar-track {
         background: #ebebeb;
