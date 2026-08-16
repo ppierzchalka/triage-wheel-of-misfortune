@@ -10,7 +10,7 @@ export const App = () => {
 
     return (
         <AppStoreProvider>
-            <div className="flex min-h-dvh flex-col bg-background text-foreground">
+            <div className="flex h-dvh flex-col overflow-hidden bg-background text-foreground">
                 <Header onOpenDrawer={openDrawer} />
                 <TeamsDrawer isOpen={isDrawerOpen} onOpenChange={setIsDrawerOpen} />
                 <MainApp onOpenDrawer={openDrawer} />

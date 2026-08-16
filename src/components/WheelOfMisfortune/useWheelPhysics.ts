@@ -23,6 +23,7 @@ export type WheelPhysics = {
     };
     fling: () => void;
     dismissWinner: () => void;
+    reset: () => void;
 };
 
 const pointerAngleAt = (clientX: number, clientY: number, target: SVGSVGElement): number => {
@@ -167,6 +168,17 @@ export const useWheelPhysics = (segmentCount: number): WheelPhysics => {
         setWinnerIndex(null);
     }, []);
 
+    const reset = useCallback(() => {
+        stopAnimation();
+        angleRef.current = 0;
+        velocityRef.current = 0;
+        draggingRef.current = false;
+        applyAngle(0);
+        setIsDragging(false);
+        setIsSpinning(false);
+        setWinnerIndex(null);
+    }, [stopAnimation]);
+
     useEffect(() => stopAnimation, [stopAnimation]);
 
     return {
@@ -182,5 +194,6 @@ export const useWheelPhysics = (segmentCount: number): WheelPhysics => {
         },
         fling,
         dismissWinner,
+        reset,
     };
 };
