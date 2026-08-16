@@ -1,25 +1,15 @@
-// tslint:disable-next-line:ordered-imports
+import { ToastProvider } from '@heroui/react';
+import { ThemeProvider } from 'next-themes';
 import React from 'react';
-import 'react-app-polyfill/ie11';
-import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
-import { createStore } from 'redux';
+import ReactDOM from 'react-dom/client';
 import { App } from './App';
-import { middleware } from './middleware';
-import { rootReducer } from './reducers';
-import * as serviceWorker from './serviceWorker';
-import './styles/css/index.css';
+import './styles/index.css';
 
-const store = createStore(rootReducer, middleware);
-
-ReactDOM.render(
-        <Provider store={store}>
+ReactDOM.createRoot(document.getElementById('root')!).render(
+    <React.StrictMode>
+        <ThemeProvider attribute="class" defaultTheme="dark" storageKey="triage-wheel-theme">
+            <ToastProvider placement="bottom end" maxVisibleToasts={3} />
             <App />
-        </Provider>,
-    document.getElementById('root')
+        </ThemeProvider>
+    </React.StrictMode>
 );
-
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();

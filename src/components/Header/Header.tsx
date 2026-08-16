@@ -1,50 +1,55 @@
-import { AppBar, Button, IconButton, Toolbar, Typography } from '@material-ui/core';
-import { Menu } from '@material-ui/icons';
-import React from 'react';
-import { useSelector } from 'react-redux';
-import { RootStateType } from '../../reducers';
-import { noop } from '../../utils/helpers';
+import { Menu, Moon, Sun } from 'lucide-react';
+import { Button } from '@heroui/react';
+import { useTheme } from 'next-themes';
+import { memo, useEffect, useState } from 'react';
 
 export type HeaderProps = {
-    onToggleDrawer: VoidFunction;
-    onShowLoginModal: VoidFunction;
-    onLogOut: VoidFunction;
+    onOpenDrawer: VoidFunction;
 };
 
-export const Header: React.FC<HeaderProps> = ({ onToggleDrawer, onShowLoginModal, onLogOut }) => {
-    const authUser = useSelector((state: RootStateType) => state.authUser);
+export const Header = memo(({ onOpenDrawer }: HeaderProps) => {
+    const { resolvedTheme, setTheme } = useTheme();
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
+
+    const isDark = resolvedTheme !== 'light';
+
     return (
-        <AppBar position="sticky" classes={{ root: 'app-bar' }}>
-            <Toolbar classes={{ root: 'app-bar__toolbar' }}>
-                <IconButton edge="start" color="inherit" onClick={onToggleDrawer}>
-                    <Menu />
-                </IconButton>
-                <Typography variant="h1" className={'app_bar__title'}>
-                    {authUser &&
-                        `Hello, ${
-                            authUser.displayName ?? 'User'
-                        }. Welcome to Triage wheel of misfortune!`}
-                </Typography>
-                <div className="app-bar__user-menu">
-                    {authUser ? (
-                        <Button
-                            color="inherit"
-                            classes={{ root: 'app-bar__user-account-button' }}
-                            onClick={authUser ? onLogOut : noop}
-                        >
-                            Log Out
-                        </Button>
+        <header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur-md">
+            <div className="mx-auto flex h-14 max-w-5xl items-center justify-between gap-2 px-3 sm:px-4">
+                <Button
+                    isIconOnly
+                    variant="ghost"
+                    onPress={onOpenDrawer}
+                    aria-label="Open participants menu"
+                >
+                    <Menu className="size-5" />
+                </Button>
+                <h1 className="truncate text-center text-base font-semibold tracking-tight">
+                    Triage Wheel of Misfortune
+                </h1>
+                <Button
+                    isIconOnly
+                    variant="ghost"
+                    onPress={() => setTheme(isDark ? 'light' : 'dark')}
+                    aria-label="Toggle theme"
+                >
+                    {isMounted ? (
+                        isDark ? (
+                            <Sun className="size-5" />
+                        ) : (
+                            <Moon className="size-5" />
+                        )
                     ) : (
-                        <Button
-                            color="inherit"
-                            classes={{ root: 'app-bar__user-account-button' }}
-                            onClick={!authUser ? onShowLoginModal : noop}
-                        >
-                            Log In
-                        </Button>
+                        <span className="size-5" />
                     )}
-                </div>
-            </Toolbar>
-        </AppBar>
+                </Button>
+            </div>
+        </header>
     );
-};
+});
+
+Header.displayName = 'Header';

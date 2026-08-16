@@ -1,114 +1,74 @@
-import {
-    Button,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogContentText,
-    DialogTitle,
-    List,
-    ListSubheader,
-    TextField,
-} from '@material-ui/core';
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { receiveSelection } from '../../actions/selection';
-import { addTeamToDB } from '../../actions/teams';
-import { RootStateType } from '../../reducers';
-import { DrawerListWrapper } from './DrawerListWrapper';
+import { Button, toast } from '@heroui/react';
+import { ShieldPlus } from 'lucide-react';
+import { useCallback, useState } from 'react';
+import { useActions, useSelectionState, useTeams } from '../../state/store';
+import { Modal } from '../overlay/Modal';
 import { DrawerTeamsListItem } from './DrawerTeamsListItem';
-import { MembersTransferList } from './MembersTransferList';
+import { TeamDialog } from './TeamDialog';
 
 export const DrawerTeamsList: React.FC = () => {
-    const [teamName, setTeamName] = useState<string>('');
-    const [activeTeam, setActiveTeam] = useState<string | null>(null);
-    const { teams, authUser, selection } = useSelector((state: RootStateType) => state);
-    const dispatch = useDispatch();
+    const teams = useTeams();
+    const { selection } = useSelectionState();
+    const actions = useActions();
+    const [isTeamDialogOpen, setIsTeamDialogOpen] = useState(false);
+    const [editingTeamId, setEditingTeamId] = useState<string | null>(null);
 
-    const handleAddTeam = (handleClose: VoidFunction) => {
-        if (authUser && teamName !== '') {
-            dispatch(addTeamToDB(authUser, teamName));
-        }
-        handleClose();
+    const openCreate = () => {
+        setEditingTeamId(null);
+        setIsTeamDialogOpen(true);
     };
 
-    const handleClearData = () => {
-        setTeamName('');
-    };
+    const handleEdit = useCallback((teamId: string) => {
+        setEditingTeamId(teamId);
+        setIsTeamDialogOpen(true);
+    }, []);
 
-    const handleSelectTeam = (id: string, checked: boolean) => {
-        const newSelection = checked
-            ? [...selection.selection, id]
-            : selection.selection.filter((member) => member !== id);
-        dispatch(receiveSelection(newSelection));
-    };
+    const handleToggle = useCallback(
+        (teamId: string) => {
+            actions.toggleSelection(teamId);
+        },
+        [actions]
+    );
 
-    const renderAddDialogContent = (handleClose: VoidFunction) => {
-        return (
-            <React.Fragment>
-                <DialogTitle>Add Team</DialogTitle>
-                <form onSubmit={() => handleAddTeam(handleClose)}>
-                    <DialogContent>
-                        <DialogContentText>
-                            To add team, please enter new team name:
-                        </DialogContentText>
-                        <TextField
-                            autoFocus
-                            onChange={(event) => setTeamName(event.target.value)}
-                            margin="dense"
-                            label="Team Name"
-                            type="text"
-                            fullWidth
-                        />
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleClose} color="primary">
-                            Cancel
-                        </Button>
-                        <Button
-                            onClick={() => handleAddTeam(handleClose)}
-                            type="submit"
-                            color="primary"
-                            disabled={teamName === ''}
-                        >
-                            Add new team
-                        </Button>
-                    </DialogActions>
-                </form>
-            </React.Fragment>
-        );
-    };
+    const handleDelete = useCallback(
+        (teamId: string) => {
+            actions.removeTeam(teamId);
+            toast.info('Team deleted');
+        },
+        [actions]
+    );
+
+    const teamList = Object.values(teams);
 
     return (
-        <DrawerListWrapper
-            addButtonLabel="Add new team"
-            onClearData={handleClearData}
-            onRenderAddDialogContent={renderAddDialogContent}
-        >
-            <ListSubheader component="div">Teams</ListSubheader>
-            <List classes={{ root: 'drawer-list__content' }} component="div">
-                {Object.values(teams).map((team, teamIndex) => (
-                    <DrawerTeamsListItem
-                        onManageMembers={setActiveTeam}
-                        key={teamIndex}
-                        team={team}
-                        selected={selection.selection.includes(team.id)}
-                        onPrimaryAction={(checked: boolean) => handleSelectTeam(team.id, checked)}
-                    />
-                ))}
-            </List>
+        <div className="flex flex-col gap-3">
+            <Button fullWidth variant="primary" className="gap-2" onPress={openCreate}>
+                <ShieldPlus className="size-4" />
+                Add team
+            </Button>
+            {teamList.length === 0 && (
+                <p className="py-8 text-center text-xs text-muted">
+                    No teams yet. Create one to spin a whole group at once.
+                </p>
+            )}
+            {teamList.map((team) => (
+                <DrawerTeamsListItem
+                    key={team.id}
+                    team={team}
+                    selected={selection.includes(team.id)}
+                    onToggle={handleToggle}
+                    onEdit={handleEdit}
+                    onDelete={handleDelete}
+                />
+            ))}
 
-            <Dialog
-                open={!!activeTeam}
-                onClose={() => setActiveTeam(null)}
-                classes={{ paper: 'drawer-tab__dialog' }}
+            <Modal
+                isOpen={isTeamDialogOpen}
+                onClose={() => setIsTeamDialogOpen(false)}
+                title={editingTeamId ? 'Edit team' : 'New team'}
             >
-                {activeTeam && (
-                    <MembersTransferList
-                        activeTeam={activeTeam}
-                        onClose={() => setActiveTeam(null)}
-                    />
-                )}
-            </Dialog>
-        </DrawerListWrapper>
+                <TeamDialog teamId={editingTeamId} onClose={() => setIsTeamDialogOpen(false)} />
+            </Modal>
+        </div>
     );
 };

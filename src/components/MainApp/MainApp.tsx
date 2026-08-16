@@ -1,26 +1,24 @@
-import { Container } from '@material-ui/core';
-import React, { useMemo } from 'react';
-import { useSelector } from 'react-redux';
-import { RootStateType } from '../../reducers';
+import { useMembers, useSelectionState, useTeams } from '../../state/store';
 import { Guide } from '../Guide/Guide';
 import { useSelection } from '../WheelOfMisfortune/useSelection';
 import { WheelOfMisfortune } from '../WheelOfMisfortune/WheelOfMisfortune';
-import { prepareParticipantsData } from './utils';
 
-export const MainApp: React.FC = () => {
-    const { members, teams, selection: selectionData } = useSelector(
-        (state: RootStateType) => state
-    );
-    const participants = useSelection(members, teams, selectionData);
+export type MainAppProps = {
+    onOpenDrawer: VoidFunction;
+};
 
-    const participantsData = useMemo(() => prepareParticipantsData(participants), [participants]);
+export const MainApp: React.FC<MainAppProps> = ({ onOpenDrawer }) => {
+    const members = useMembers();
+    const teams = useTeams();
+    const { selection, selectionType } = useSelectionState();
+    const participants = useSelection(members, teams, selection, selectionType);
 
     return (
-        <div className={'main-app__wrapper'}>
-            <Container classes={{ root: 'main-app__container' }}>
+        <main className="w-full flex-1 overflow-y-auto">
+            <div className="mx-auto flex w-full max-w-5xl flex-col items-center gap-8 px-4 py-6">
+                <WheelOfMisfortune participants={participants} onOpenDrawer={onOpenDrawer} />
                 <Guide />
-                <WheelOfMisfortune participants={participantsData} />
-            </Container>
-        </div>
+            </div>
+        </main>
     );
 };

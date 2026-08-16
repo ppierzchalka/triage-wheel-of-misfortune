@@ -1,0 +1,35 @@
+name: Deploy to GitHub Pages
+
+on:
+    push:
+        branches: [master]
+
+permissions:
+    contents: write
+
+jobs:
+    build-and-deploy:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - uses: pnpm/action-setup@v4
+              with:
+                  version: 11
+
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: 22
+                  cache: pnpm
+
+            - run: pnpm install --frozen-lockfile
+            - run: pnpm run lint
+            - run: pnpm test
+            - run: pnpm exec playwright install --with-deps chromium
+            - run: pnpm run test:e2e
+            - run: pnpm run build
+
+            - uses: peaceiris/actions-gh-pages@v4
+              with:
+                  github_token: ${{ secrets.GITHUB_TOKEN }}
+                  publish_dir: ./dist
