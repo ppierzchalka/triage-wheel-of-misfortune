@@ -1,9 +1,6 @@
 {
     "printWidth": 100,
     "tabWidth": 4,
-    "newline-before-return": true,
-    "no-duplicate-variable": [true, "check-parameters"],
-    "no-var-keyword": true,
     "endOfLine": "lf",
     "semi": true,
     "singleQuote": true,
@@ -11,8 +8,5 @@
     "quoteProps": "as-needed",
     "trailingComma": "es5",
     "arrowParens": "always",
-    "jsxBracketSameLine": false,
-    "options": {
-        "tabWidth": 4
-    }
+    "bracketSameLine": false
 }
